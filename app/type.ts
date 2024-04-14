@@ -11,3 +11,12 @@ export interface DropDownApiDataType {
   type: string;
   date: string;
 }
+
+export interface CategoryPropsType {
+  title: string,
+  titleColor: string,
+  desc: string,
+  isActive: boolean
+}
+
+export type CategoryListType = Omit<CategoryPropsType, 'isActive'>;

@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
 import { Header } from "./component/header";
+import { SideBar } from "./component/sideBar";
 
 export default function Home() {
   return (
@@ -8,12 +9,14 @@ export default function Home() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "space-between",
         alignItems: "center",
         minHeight: "100vh",
       }}
     >
-        <Header />
+      <Header />
+      <Box sx={{ display: "flex", margin: "50px auto" }}>
+        <SideBar />
+      </Box>
     </Box>
   );
 }
