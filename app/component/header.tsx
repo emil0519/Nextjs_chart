@@ -6,18 +6,26 @@ import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import { InputAdornment } from "@mui/material";
 import { Search } from "@mui/icons-material";
-import { finmindToken, finmindtradeDomain } from "../constant";
+import {
+  FirmmindDataTypeEnum,
+  finmindToken,
+  finmindtradeDomain,
+} from "../constant";
 import { useDebouncedCallback } from "use-debounce";
 import React, { useState } from "react";
 import { ApiResponseType, DropDownApiDataType } from "../type";
 
-export const Header = (): React.ReactElement => {
+export const Header = ({
+  setSelectedStock,
+}: {
+  setSelectedStock: (selectedStock: string) => void;
+}): React.ReactElement => {
   const theme = useTheme();
   const [dropDownData, setDropDownData] = useState<string[]>([]);
   const getDropDownData = useDebouncedCallback(async (input: string) => {
     try {
       const res = await fetch(
-        `${finmindtradeDomain}&data_id=${input}&token=${finmindToken}`,
+        `${finmindtradeDomain}?${FirmmindDataTypeEnum.TaiwanStockInfo}&data_id=${input}&token=${finmindToken}`,
         {
           method: "GET",
         }
@@ -29,8 +37,8 @@ export const Header = (): React.ReactElement => {
     }
   }, 500);
 
-  const processDropDownData = (data: DropDownApiDataType[]) =>
-    data.map((item) => `${item.stock_id} ${item.stock_name}`);
+  const processDropDownData = (data: DropDownApiDataType[]): string[] =>
+    data.map((item) => `${item.stock_name}(${item.stock_id})`);
 
   return (
     <Box
@@ -52,6 +60,7 @@ export const Header = (): React.ReactElement => {
             backgroundColor: "white",
           },
         }}
+        onChange={(_, value) => setSelectedStock(value || "")}
         clearOnBlur={false}
         renderInput={(params) => (
           <TextField
