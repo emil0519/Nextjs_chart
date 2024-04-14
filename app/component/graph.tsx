@@ -4,7 +4,15 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useState } from "react";
 import { yearsDropdownOptions } from "../constant";
 
-export const Graph = (): React.ReactElement => {
+interface PropsType {
+  startDate: string;
+  setStartDate: (startDate: string) => void;
+}
+
+export const Graph = ({
+  startDate,
+  setStartDate,
+}: PropsType): React.ReactElement => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [buttonText, setButtonText] = useState<string>("近5年");
   const open = Boolean(anchorEl);
@@ -13,7 +21,7 @@ export const Graph = (): React.ReactElement => {
     setAnchorEl(event.currentTarget);
 
   const closeMenu = (): void => setAnchorEl(null);
-  
+
   return (
     <Box
       component="section"
@@ -51,6 +59,7 @@ export const Graph = (): React.ReactElement => {
               onClick={() => {
                 closeMenu();
                 setButtonText(option.key);
+                setStartDate(option.value)
               }}
             >
               {option.key}

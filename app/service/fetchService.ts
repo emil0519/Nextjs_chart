@@ -1,10 +1,11 @@
 import { FirmmindDataTypeEnum } from "../constant";
-import { ApiResponseType, DropDownApiDataType } from "../type";
+import { ApiResponseType, DropDownApiDataType, GraphDataType } from "../type";
+import { formatDate } from "../utils";
 export interface FetchServiceType {
   GetStockInfo(
     stockId: string
   ): Promise<ApiResponseType<DropDownApiDataType[]>["data"]>;
-  GetSpecificStock(stockId: string): Promise<any>;
+  GetSpecificStockWithDate(stockId: string, startDate: string): Promise<GraphDataType[]>;
 }
 
 export class fetchService implements FetchServiceType {
@@ -25,20 +26,22 @@ export class fetchService implements FetchServiceType {
     return data.data;
   }
 
-  public async GetSpecificStock(stockId: string): Promise<any> {
+  public async GetSpecificStockWithDate(
+    stockId: string,
+    startDate: string
+  ): Promise<GraphDataType[]> {
     const currentDate = new Date();
     const fiveYearsAgo = new Date(currentDate);
     fiveYearsAgo.setFullYear(currentDate.getFullYear() - 5);
     const res = await fetch(
       `${this.finmindtradeDomain}?${
         FirmmindDataTypeEnum.TaiwanStockMonthRevenue
-      }&data_id=${2330}&start_date=2019-01-01&end_date=2020-01-01&token=${
-        this.finmindToken
-      }`,
+      }&data_id=${stockId}&start_date=${startDate}&end_date=${formatDate(0)}&token=${this.finmindToken}`,
       {
         method: "GET",
       }
     );
-    const data: ApiResponseType<DropDownApiDataType[]> = await res.json();
+    const data: ApiResponseType<GraphDataType[]> = await res.json();
+    return data.data
   }
 }

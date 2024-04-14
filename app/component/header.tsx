@@ -10,31 +10,24 @@ import { useDebouncedCallback } from "use-debounce";
 import React, { useState } from "react";
 import { DropDownApiDataType } from "../type";
 import { fetchService } from "../service/fetchService";
-import { FirmmindDataTypeEnum } from "../constant";
+import { getSepcificStockWithDate } from "../utils";
+
+interface PropsType {
+  startDate: string;
+  setSelectedStock: (selectedStock: string) => void;
+}
 
 export const Header = ({
+  startDate,
   setSelectedStock,
-}: {
-  setSelectedStock: (selectedStock: string) => void;
-}): React.ReactElement => {
+}: PropsType): React.ReactElement => {
   const fetchServices = new fetchService();
   const theme = useTheme();
   const [dropDownData, setDropDownData] = useState<DropDownApiDataType[]>([]);
   const getDropDownData = useDebouncedCallback(async (input: string) => {
     try {
-      const data = await fetchServices.GetStockInfo(
-        input
-      );
+      const data = await fetchServices.GetStockInfo(input);
       setDropDownData(data);
-    } catch (err) {
-      console.log(err);
-    }
-  }, 500);
-
-  const getSepcificStock = useDebouncedCallback(async (stockId: string) => {
-    try {
-      const data = await fetchServices.GetSpecificStock(stockId);
-      console.log(data, "this is stock detail");
     } catch (err) {
       console.log(err);
     }
@@ -65,7 +58,7 @@ export const Header = ({
         onChange={(_, value) => {
           if (value) {
             setSelectedStock(formatTitle(value));
-            getSepcificStock(value.stock_id);
+            getSepcificStockWithDate(value.stock_id, startDate);
           }
         }}
         clearOnBlur={false}
