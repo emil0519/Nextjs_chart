@@ -33,9 +33,8 @@ export const Header = ({
 
   const getSepcificStock = useDebouncedCallback(async (stockId: string) => {
     try {
-      const data = await fetchServices.GetStockInfo(stockId);
+      const data = await fetchServices.GetSpecificStock(stockId);
       console.log(data, "this is stock detail");
-      setDropDownData(data);
     } catch (err) {
       console.log(err);
     }
@@ -60,6 +59,7 @@ export const Header = ({
           marginTop: 2,
           marginBottom: 2,
         }}
+        aria-haspopup
         options={dropDownData}
         getOptionLabel={(option) => formatTitle(option)}
         onChange={(_, value) => {

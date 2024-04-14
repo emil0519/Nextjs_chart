@@ -1,4 +1,5 @@
-import { CategoryListType, SubCategoryListType } from "./type";
+import { CategoryListType, KeyValueType, SubCategoryListType } from "./type";
+import { formatDate } from "./utils";
 
 export enum FirmmindDataTypeEnum {
   TaiwanStockInfo = "dataset=TaiwanStockInfo",
@@ -27,4 +28,19 @@ export const subCateoryList: SubCategoryListType[] = [
   { desc: "現金流量表" },
   { desc: "股利政策" },
   { desc: "電子書" },
+];
+
+export const yearsDropdownOptions: KeyValueType[] = [
+  {
+    key: "近3年",
+    value: formatDate(3),
+  },
+  {
+    key: "近5年",
+    value: formatDate(5),
+  },
+  {
+    key: "近10年",
+    value: formatDate(10),
+  },
 ];

@@ -25,3 +25,8 @@ export interface CategoryPropsType {
 export type CategoryListType = Omit<CategoryPropsType, "isActive" | "sx">;
 
 export type SubCategoryListType = Pick<CategoryListType, "desc">;
+
+export interface KeyValueType{
+  key: string;
+  value: string;
+}
