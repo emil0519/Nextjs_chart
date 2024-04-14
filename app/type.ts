@@ -1,3 +1,5 @@
+import { SxProps } from "@mui/material";
+
 export interface ApiResponseType<T> {
   msg: string;
   status: number;
@@ -13,10 +15,13 @@ export interface DropDownApiDataType {
 }
 
 export interface CategoryPropsType {
-  title: string,
-  titleColor: string,
-  desc: string,
-  isActive: boolean
+  title?: string;
+  titleColor?: string;
+  desc: string;
+  descStyle?: SxProps;
+  isActive: boolean;
 }
 
-export type CategoryListType = Omit<CategoryPropsType, 'isActive'>;
+export type CategoryListType = Omit<CategoryPropsType, "isActive" | "sx">;
+
+export type SubCategoryListType = Pick<CategoryListType, "desc">;
