@@ -1,14 +1,9 @@
 import { CategoryListType, SubCategoryListType } from "./type";
 
-export const finmindtradeDomain = "https://api.finmindtrade.com/api/v4/data";
-export const finmindToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNCAxMjo0NTozMSIsInVzZXJfaWQiOiJlbWlsMDUxOSIsImlwIjoiMjE5LjkxLjg4LjEyMiJ9.c_IucjXGhNR96HsuzQm1fky8YfQUx9npqbTSLN7FwQ8";
-
 export enum FirmmindDataTypeEnum {
   TaiwanStockInfo = "dataset=TaiwanStockInfo",
   TaiwanStockMonthRevenue = "dataset=TaiwanStockMonthRevenue",
 }
-
 export const mainCateoryList: CategoryListType[] = [
   { title: "B", desc: "最新動態", titleColor: "#434343" },
   { title: "F", desc: "股票健診", titleColor: "#434343" },

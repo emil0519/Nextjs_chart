@@ -6,6 +6,7 @@ import { SideBar } from "./component/sideBar";
 import { Title } from "./component/title";
 import { useState } from "react";
 
+
 export default function Home() {
   const [selectedStock, setSelectedStock] = useState<string>("請選擇股票")
   return (

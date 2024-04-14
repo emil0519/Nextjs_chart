@@ -10,18 +10,22 @@ import { useDebouncedCallback } from "use-debounce";
 import React, { useState } from "react";
 import { DropDownApiDataType } from "../type";
 import { fetchService } from "../service/fetchService";
+import { FirmmindDataTypeEnum } from "../constant";
 
 export const Header = ({
   setSelectedStock,
 }: {
   setSelectedStock: (selectedStock: string) => void;
 }): React.ReactElement => {
+  const fetchServices = new fetchService();
   const theme = useTheme();
   const [dropDownData, setDropDownData] = useState<string[]>([]);
-  const fetchServices = new fetchService();
   const getDropDownData = useDebouncedCallback(async (input: string) => {
     try {
-      const data = await fetchServices.GetStockInfo(input)
+      const data = await fetchServices.GetStockInfo(
+        FirmmindDataTypeEnum.TaiwanStockInfo,
+        input
+      );
       setDropDownData(processDropDownData(data));
     } catch (err) {
       console.log(err);
