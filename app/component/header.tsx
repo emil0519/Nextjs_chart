@@ -19,21 +19,30 @@ export const Header = ({
 }): React.ReactElement => {
   const fetchServices = new fetchService();
   const theme = useTheme();
-  const [dropDownData, setDropDownData] = useState<string[]>([]);
+  const [dropDownData, setDropDownData] = useState<DropDownApiDataType[]>([]);
   const getDropDownData = useDebouncedCallback(async (input: string) => {
     try {
       const data = await fetchServices.GetStockInfo(
-        FirmmindDataTypeEnum.TaiwanStockInfo,
         input
       );
-      setDropDownData(processDropDownData(data));
+      setDropDownData(data);
     } catch (err) {
       console.log(err);
     }
   }, 500);
 
-  const processDropDownData = (data: DropDownApiDataType[]): string[] =>
-    data.map((item) => `${item.stock_name}(${item.stock_id})`);
+  const getSepcificStock = useDebouncedCallback(async (stockId: string) => {
+    try {
+      const data = await fetchServices.GetStockInfo(stockId);
+      console.log(data, "this is stock detail");
+      setDropDownData(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }, 500);
+
+  const formatTitle = (option: DropDownApiDataType): string =>
+    `${option.stock_name}(${option.stock_id})`;
 
   return (
     <Box
@@ -46,16 +55,19 @@ export const Header = ({
       }}
     >
       <Autocomplete
-        options={dropDownData}
         sx={{
           width: 400,
           marginTop: 2,
           marginBottom: 2,
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "white",
-          },
         }}
-        onChange={(_, value) => setSelectedStock(value || "")}
+        options={dropDownData}
+        getOptionLabel={(option) => formatTitle(option)}
+        onChange={(_, value) => {
+          if (value) {
+            setSelectedStock(formatTitle(value));
+            getSepcificStock(value.stock_id);
+          }
+        }}
         clearOnBlur={false}
         renderInput={(params) => (
           <TextField
