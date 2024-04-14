@@ -6,14 +6,10 @@ import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import { InputAdornment } from "@mui/material";
 import { Search } from "@mui/icons-material";
-import {
-  FirmmindDataTypeEnum,
-  finmindToken,
-  finmindtradeDomain,
-} from "../constant";
 import { useDebouncedCallback } from "use-debounce";
 import React, { useState } from "react";
-import { ApiResponseType, DropDownApiDataType } from "../type";
+import { DropDownApiDataType } from "../type";
+import { fetchService } from "../service/fetchService";
 
 export const Header = ({
   setSelectedStock,
@@ -22,16 +18,11 @@ export const Header = ({
 }): React.ReactElement => {
   const theme = useTheme();
   const [dropDownData, setDropDownData] = useState<string[]>([]);
+  const fetchServices = new fetchService();
   const getDropDownData = useDebouncedCallback(async (input: string) => {
     try {
-      const res = await fetch(
-        `${finmindtradeDomain}?${FirmmindDataTypeEnum.TaiwanStockInfo}&data_id=${input}&token=${finmindToken}`,
-        {
-          method: "GET",
-        }
-      );
-      const data: ApiResponseType<DropDownApiDataType[]> = await res.json();
-      setDropDownData(processDropDownData(data.data));
+      const data = await fetchServices.GetStockInfo(input)
+      setDropDownData(processDropDownData(data));
     } catch (err) {
       console.log(err);
     }
