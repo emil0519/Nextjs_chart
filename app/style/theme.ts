@@ -8,10 +8,23 @@ const roboto = Roboto({
   display: 'swap',
 });
 
+declare module '@mui/material/styles' {
+  interface Theme {
+    background: {
+      white: string;
+    };
+  }
+  interface ThemeOptions {
+    background?: {
+      white?: string;
+    };
+  }
+}
+
 const theme = createTheme({
-  typography: {
-    fontFamily: roboto.style.fontFamily,
-  },
+  background:{
+    white: 'white'
+  }
 });
 
 export default theme;

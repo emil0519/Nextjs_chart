@@ -9,7 +9,7 @@ import { GlobalStyles, CssBaseline } from "@mui/material";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Emil - Stark Tech前端評測",
+  title: "Emil - StarkTech前端評測",
 };
 
 export default function RootLayout({
@@ -24,7 +24,7 @@ export default function RootLayout({
           <CssBaseline />{" "}
           <GlobalStyles
             styles={{
-              body: { background: "white" },
+              body: { background: "#EDEDED", padding:0 },
             }}
           />
           <ThemeProvider theme={theme}>{children}</ThemeProvider>
