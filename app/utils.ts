@@ -90,3 +90,6 @@ export const processYoy = (data: GraphDataType[]): number[] => {
 
 const calculateYoyForEachMonth = (lastYear: number, thisYear: number): number =>
   Number(((thisYear / lastYear - 1) * 100).toFixed(2));
+
+export const addZero = (num: number): string =>
+  num < 10 ? num.toString().padStart(2, "0") : num.toString();
