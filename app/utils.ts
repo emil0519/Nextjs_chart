@@ -1,4 +1,5 @@
 import { fetchService } from "./service/fetchService";
+import { GraphDataType } from "./type";
 
 export const formatDate = (yearsBefore: number): string => {
   const currentDate = new Date();
@@ -7,7 +8,6 @@ export const formatDate = (yearsBefore: number): string => {
   const day = String(currentDate.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 };
-
 
 /**
  * Get label for chart.js
@@ -59,3 +59,31 @@ export const getSepcificStockWithDate = async (
     console.log(err);
   }
 };
+
+export const getYearBeofore = (startDate: string): string => {
+  const date = new Date(startDate);
+  date.setFullYear(date.getFullYear() - 1);
+  return date.toISOString().slice(0, 10);
+};
+
+export const stripFirstYearRevenue = (data: GraphDataType[]): number[] =>
+  data.slice(12).map((monthlyData) => monthlyData.revenue);
+
+export const processYoy = (data: GraphDataType[]): number[] => {
+  let currentMonth = 12;
+  let yoy = [];
+  for (let i = 0; i < data.length - 12; i++) {
+    if (data[i].revenue_month === data[currentMonth].revenue_month) {
+      yoy.push(
+        calculateYoyForEachMonth(data[i].revenue, data[currentMonth].revenue)
+      );
+    } else {
+      yoy.push(0);
+    }
+    currentMonth++;
+  }
+  return yoy;
+};
+
+const calculateYoyForEachMonth = (lastYear: number, thisYear: number): number =>
+  Number(((thisYear / lastYear - 1) * 100).toFixed(2));

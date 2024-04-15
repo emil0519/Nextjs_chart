@@ -16,8 +16,7 @@ export default function Home() {
   });
   const [startDate, setStartDate] = useState<string>(formatDate(5));
   const [graphData, setGraphData] = useState<number[]>([]);
-
-  
+  const [yoy, setYoy] = useState<number[]>([]);
 
   return (
     <Box
@@ -32,6 +31,7 @@ export default function Home() {
         startDate={startDate}
         setSelectedStock={setSelectedStock}
         setGraphData={setGraphData}
+        setYoy={setYoy}
       />
       <Box
         component="main"
@@ -46,6 +46,8 @@ export default function Home() {
             graphData={graphData}
             setGraphData={setGraphData}
             selectedStockId={selectedStock.stockId}
+            yoy={yoy}
+            setYoy={setYoy}
           />
         </Box>
       </Box>

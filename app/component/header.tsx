@@ -10,18 +10,20 @@ import { useDebouncedCallback } from "use-debounce";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { DropDownApiDataType, SelectedStockType } from "../type";
 import { fetchService } from "../service/fetchService";
-import { getSepcificStockWithDate } from "../utils";
+import { getSepcificStockWithDate, getYearBeofore, processYoy } from "../utils";
 
 interface PropsType {
   startDate: string;
   setSelectedStock: Dispatch<SetStateAction<SelectedStockType>>;
   setGraphData: (graphData: number[]) => void;
+  setYoy: (yoy: number[]) => void;
 }
 
 export const Header = ({
   startDate,
   setSelectedStock,
   setGraphData,
+  setYoy,
 }: PropsType): React.ReactElement => {
   const fetchServices = new fetchService();
   const theme = useTheme();
@@ -63,9 +65,14 @@ export const Header = ({
               name: formatTitle(value),
               stockId: Number(value.stock_id),
             });
-            getSepcificStockWithDate(value.stock_id, startDate).then((data) => {
-              if (data)
+            getSepcificStockWithDate(
+              value.stock_id,
+              getYearBeofore(startDate)
+            ).then((data) => {
+              if (data) {
                 setGraphData(data.map((monthlyData) => monthlyData.revenue));
+                setYoy(processYoy(data));
+              }
             });
           }
         }}

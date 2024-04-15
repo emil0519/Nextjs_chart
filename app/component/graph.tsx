@@ -16,7 +16,13 @@ import {
   LineController,
   BarController,
 } from "chart.js";
-import { getSepcificStockWithDate, getYearLabels } from "../utils";
+import {
+  getSepcificStockWithDate,
+  getYearBeofore,
+  getYearLabels,
+  processYoy,
+  stripFirstYearRevenue,
+} from "../utils";
 import { SelectedStockType } from "../type";
 
 ChartJS.register(
@@ -35,8 +41,10 @@ interface PropsType {
   startDate: string;
   setStartDate: (startDate: string) => void;
   graphData: number[];
-  setGraphData:(graphData: number[])=>void;
+  setGraphData: (graphData: number[]) => void;
   selectedStockId: SelectedStockType["stockId"];
+  yoy: number[];
+  setYoy: (yoy: number[]) => void;
 }
 
 export const Graph = ({
@@ -45,6 +53,8 @@ export const Graph = ({
   graphData,
   setGraphData,
   selectedStockId,
+  yoy,
+  setYoy,
 }: PropsType): React.ReactElement => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [buttonText, setButtonText] = useState<string>("近5年");
@@ -97,14 +107,18 @@ export const Graph = ({
                 closeMenu();
                 setButtonText(option.key);
                 setStartDate(option.value);
-                console.log('selectedStockId',selectedStockId)
                 selectedStockId &&
                   getSepcificStockWithDate(
                     selectedStockId.toString(),
-                    option.value
+                    // get both data for graph & data for yoy analysis at one api call
+                    // e.g. get data from 2020-04-15 to 2024-04-15 for yoy analysis
+                    // so comparasion could start for data of 2020-04-15 and 2021-04-15
+                    getYearBeofore(option.value)
                   ).then((data) => {
-                    if (data)
-                      setGraphData(data.map((monthlyData) => monthlyData.revenue));
+                    if (data) {
+                      setGraphData(stripFirstYearRevenue(data));
+                      setYoy(processYoy(data));
+                    }
                   });
               }}
             >
@@ -123,22 +137,39 @@ export const Graph = ({
                 minRotation: 0,
               },
             },
+            y: {
+              position: "right",
+              title: {
+                text: "%",
+                display: true,
+                align: "end",
+              },
+            },
+            y1: {
+              position: "left",
+              title: {
+                text: "元",
+                display: true,
+                align: "end",
+              },
+            },
           },
         }}
         data={{
           labels,
           datasets: [
-            // {
-            //   type: "line" as const,
-            //   label: "Dataset 1",
-            //   borderColor: "rgb(255, 99, 132)",
-            //   borderWidth: 2,
-            //   fill: false,
-            //   data: [-317, -90, 345, -665, 349, -1, -481],
-            // },
+            {
+              type: "line" as const,
+              label: "單月營收年增率",
+              yAxisID: "y",
+              backgroundColor: "#CB4B4B",
+              borderColor: "#CB4B4B",
+              data: yoy,
+            },
             {
               type: "bar" as const,
               label: "每月營收",
+              yAxisID: "y1",
               backgroundColor: "#FCDF9B",
               data: graphData,
               borderColor: "#F1AB02",
