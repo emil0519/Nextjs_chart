@@ -6,31 +6,39 @@ import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import { InputAdornment } from "@mui/material";
 import { Search } from "@mui/icons-material";
-import { finmindToken, finmindtradeDomain } from "../constant";
 import { useDebouncedCallback } from "use-debounce";
-import React, { useState } from "react";
-import { ApiResponseType, DropDownApiDataType } from "../type";
+import React, { Dispatch, SetStateAction, useState } from "react";
+import { DropDownApiDataType, SelectedStockType } from "../type";
+import { fetchService } from "../service/fetchService";
+import { getSepcificStockWithDate, getYearBeofore, processYoy } from "../utils";
 
-export const Header = (): React.ReactElement => {
+interface PropsType {
+  startDate: string;
+  setSelectedStock: Dispatch<SetStateAction<SelectedStockType>>;
+  setGraphData: (graphData: number[]) => void;
+  setYoy: (yoy: number[]) => void;
+}
+
+export const Header = ({
+  startDate,
+  setSelectedStock,
+  setGraphData,
+  setYoy,
+}: PropsType): React.ReactElement => {
+  const fetchServices = new fetchService();
   const theme = useTheme();
-  const [dropDownData, setDropDownData] = useState<string[]>([]);
+  const [dropDownData, setDropDownData] = useState<DropDownApiDataType[]>([]);
   const getDropDownData = useDebouncedCallback(async (input: string) => {
     try {
-      const res = await fetch(
-        `${finmindtradeDomain}&data_id=${input}&token=${finmindToken}`,
-        {
-          method: "GET",
-        }
-      );
-      const data: ApiResponseType<DropDownApiDataType[]> = await res.json();
-      setDropDownData(processDropDownData(data.data));
+      const data = await fetchServices.GetStockInfo(input);
+      setDropDownData(data);
     } catch (err) {
       console.log(err);
     }
   }, 500);
 
-  const processDropDownData = (data: DropDownApiDataType[]) =>
-    data.map((item) => `${item.stock_id} ${item.stock_name}`);
+  const formatTitle = (option: DropDownApiDataType): string =>
+    `${option.stock_name}(${option.stock_id})`;
 
   return (
     <Box
@@ -43,14 +51,30 @@ export const Header = (): React.ReactElement => {
       }}
     >
       <Autocomplete
-        options={dropDownData}
         sx={{
           width: 400,
           marginTop: 2,
           marginBottom: 2,
-          "&::-webkit-scrollbar-thumb": {
-            backgroundColor: "white",
-          },
+        }}
+        aria-haspopup
+        options={dropDownData}
+        getOptionLabel={(option) => formatTitle(option)}
+        onChange={(_, value) => {
+          if (value) {
+            setSelectedStock({
+              name: formatTitle(value),
+              stockId: Number(value.stock_id),
+            });
+            getSepcificStockWithDate(
+              value.stock_id,
+              getYearBeofore(startDate)
+            ).then((data) => {
+              if (data) {
+                setGraphData(data.map((monthlyData) => monthlyData.revenue));
+                setYoy(processYoy(data));
+              }
+            });
+          }
         }}
         clearOnBlur={false}
         renderInput={(params) => (
