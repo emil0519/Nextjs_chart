@@ -39,7 +39,7 @@ export class fetchService implements FetchServiceType {
     const res = await fetch(
       `${this.finmindtradeDomain}?${
         FirmmindDataTypeEnum.TaiwanStockMonthRevenue
-      }&data_id=${stockId}&start_date=${formatDate(10)}&end_date=${formatDate(
+      }&data_id=${stockId}&start_date=${startDate}&end_date=${formatDate(
         0
       )}&token=${this.finmindToken}`,
       {

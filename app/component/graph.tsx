@@ -16,7 +16,8 @@ import {
   LineController,
   BarController,
 } from "chart.js";
-import { getYearLabels } from "../utils";
+import { getSepcificStockWithDate, getYearLabels } from "../utils";
+import { SelectedStockType } from "../type";
 
 ChartJS.register(
   LinearScale,
@@ -30,25 +31,29 @@ ChartJS.register(
   BarController
 );
 
-
 interface PropsType {
   startDate: string;
   setStartDate: (startDate: string) => void;
   graphData: number[];
+  setGraphData:(graphData: number[])=>void;
+  selectedStockId: SelectedStockType["stockId"];
 }
 
 export const Graph = ({
   startDate,
   setStartDate,
   graphData,
+  setGraphData,
+  selectedStockId,
 }: PropsType): React.ReactElement => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [buttonText, setButtonText] = useState<string>("近5年");
   const open = Boolean(anchorEl);
   const labels = useMemo(() => getYearLabels(startDate), [startDate]);
 
-  const openMenu = (event: React.MouseEvent<HTMLButtonElement>): void =>
-    setAnchorEl(event.currentTarget);
+  const openMenu: (event: React.MouseEvent<HTMLButtonElement>) => void = (
+    event
+  ) => setAnchorEl(event.currentTarget);
 
   const closeMenu = (): void => setAnchorEl(null);
 
@@ -64,8 +69,10 @@ export const Graph = ({
         padding: "20px 10px",
       }}
     >
+      {/* Button above graphs */}
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Button variant="contained">每月營收</Button>
+        {/* Years select options */}
         <Button
           variant="contained"
           id="year-dropdown-button"
@@ -90,6 +97,15 @@ export const Graph = ({
                 closeMenu();
                 setButtonText(option.key);
                 setStartDate(option.value);
+                console.log('selectedStockId',selectedStockId)
+                selectedStockId &&
+                  getSepcificStockWithDate(
+                    selectedStockId.toString(),
+                    option.value
+                  ).then((data) => {
+                    if (data)
+                      setGraphData(data.map((monthlyData) => monthlyData.revenue));
+                  });
               }}
             >
               {option.key}

@@ -26,7 +26,7 @@ export type CategoryListType = Omit<CategoryPropsType, "isActive" | "sx">;
 
 export type SubCategoryListType = Pick<CategoryListType, "desc">;
 
-export interface KeyValueType{
+export interface KeyValueType {
   key: string;
   value: string;
 }
@@ -38,4 +38,9 @@ export interface GraphDataType {
   revenue: number;
   revenue_month: number;
   revenue_year: number;
+}
+
+export interface SelectedStockType {
+  name: string;
+  stockId: number | null;
 }

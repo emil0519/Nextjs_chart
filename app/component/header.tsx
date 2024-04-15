@@ -7,14 +7,14 @@ import TextField from "@mui/material/TextField";
 import { InputAdornment } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import { useDebouncedCallback } from "use-debounce";
-import React, { useState } from "react";
-import { DropDownApiDataType } from "../type";
+import React, { Dispatch, SetStateAction, useState } from "react";
+import { DropDownApiDataType, SelectedStockType } from "../type";
 import { fetchService } from "../service/fetchService";
 import { getSepcificStockWithDate } from "../utils";
 
 interface PropsType {
   startDate: string;
-  setSelectedStock: (selectedStock: string) => void;
+  setSelectedStock: Dispatch<SetStateAction<SelectedStockType>>;
   setGraphData: (graphData: number[]) => void;
 }
 
@@ -59,9 +59,13 @@ export const Header = ({
         getOptionLabel={(option) => formatTitle(option)}
         onChange={(_, value) => {
           if (value) {
-            setSelectedStock(formatTitle(value));
+            setSelectedStock({
+              name: formatTitle(value),
+              stockId: Number(value.stock_id),
+            });
             getSepcificStockWithDate(value.stock_id, startDate).then((data) => {
-              if (data) setGraphData(data.map(monthlyData=>monthlyData.revenue));
+              if (data)
+                setGraphData(data.map((monthlyData) => monthlyData.revenue));
             });
           }
         }}

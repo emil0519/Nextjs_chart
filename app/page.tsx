@@ -7,11 +7,17 @@ import { Title } from "./component/title";
 import { useState } from "react";
 import { Graph } from "./component/graph";
 import { formatDate } from "./utils";
+import { SelectedStockType } from "./type";
 
 export default function Home() {
-  const [selectedStock, setSelectedStock] = useState<string>("請選擇股票");
-  const [startDate, setStartDate] = useState<string>(formatDate(10));
+  const [selectedStock, setSelectedStock] = useState<SelectedStockType>({
+    name: "請選擇股票",
+    stockId: null,
+  });
+  const [startDate, setStartDate] = useState<string>(formatDate(5));
   const [graphData, setGraphData] = useState<number[]>([]);
+
+  
 
   return (
     <Box
@@ -33,8 +39,14 @@ export default function Home() {
       >
         <SideBar />
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <Title title={selectedStock} />
-          <Graph startDate={startDate} setStartDate={setStartDate} graphData={graphData}/>
+          <Title title={selectedStock.name} />
+          <Graph
+            startDate={startDate}
+            setStartDate={setStartDate}
+            graphData={graphData}
+            setGraphData={setGraphData}
+            selectedStockId={selectedStock.stockId}
+          />
         </Box>
       </Box>
     </Box>

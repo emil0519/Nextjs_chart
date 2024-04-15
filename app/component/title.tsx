@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
+import { SelectedStockType } from "../type";
 
-export const Title = ({ title }: { title: string }): React.ReactElement => (
+export const Title = ({ title }: { title: SelectedStockType["name"] }): React.ReactElement => (
   <Box
     sx={{
       backgroundColor: "#FAFAFA",
