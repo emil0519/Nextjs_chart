@@ -8,14 +8,14 @@ import { InputAdornment } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import { useDebouncedCallback } from "use-debounce";
 import React, { Dispatch, SetStateAction, useState } from "react";
-import { DropDownApiDataType, SelectedStockType } from "../type";
+import { DropDownApiDataType, GraphDataType, SelectedStockType } from "../type";
 import { fetchService } from "../service/fetchService";
 import { getSepcificStockWithDate, getYearBeofore, processYoy } from "../utils";
 
 interface PropsType {
   startDate: string;
   setSelectedStock: Dispatch<SetStateAction<SelectedStockType>>;
-  setGraphData: (graphData: number[]) => void;
+  setGraphData: (graphData: GraphDataType[]) => void;
   setYoy: (yoy: number[]) => void;
 }
 
@@ -70,7 +70,7 @@ export const Header = ({
               getYearBeofore(startDate)
             ).then((data) => {
               if (data) {
-                setGraphData(data.map((monthlyData) => monthlyData.revenue));
+                setGraphData(data);
                 setYoy(processYoy(data));
               }
             });

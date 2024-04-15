@@ -66,8 +66,11 @@ export const getYearBeofore = (startDate: string): string => {
   return date.toISOString().slice(0, 10);
 };
 
-export const stripFirstYearRevenue = (data: GraphDataType[]): number[] =>
-  data.slice(12).map((monthlyData) => monthlyData.revenue);
+export const stripFirstYear = (data: GraphDataType[]): GraphDataType[] =>
+  data.slice(12);
+
+export const getDisplayGraphData = (data: GraphDataType[]): number[] =>
+  data.map((monthlyData) => monthlyData.revenue);
 
 export const processYoy = (data: GraphDataType[]): number[] => {
   let currentMonth = 12;

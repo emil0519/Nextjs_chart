@@ -17,13 +17,14 @@ import {
   BarController,
 } from "chart.js";
 import {
+  getDisplayGraphData,
   getSepcificStockWithDate,
   getYearBeofore,
   getYearLabels,
   processYoy,
-  stripFirstYearRevenue,
+  stripFirstYear,
 } from "../utils";
-import { SelectedStockType } from "../type";
+import { GraphDataType, SelectedStockType } from "../type";
 
 ChartJS.register(
   LinearScale,
@@ -40,8 +41,8 @@ ChartJS.register(
 interface PropsType {
   startDate: string;
   setStartDate: (startDate: string) => void;
-  graphData: number[];
-  setGraphData: (graphData: number[]) => void;
+  graphData: GraphDataType[];
+  setGraphData: (graphData: GraphDataType[]) => void;
   selectedStockId: SelectedStockType["stockId"];
   yoy: number[];
   setYoy: (yoy: number[]) => void;
@@ -116,7 +117,7 @@ export const Graph = ({
                     getYearBeofore(option.value)
                   ).then((data) => {
                     if (data) {
-                      setGraphData(stripFirstYearRevenue(data));
+                      setGraphData(stripFirstYear(data));
                       setYoy(processYoy(data));
                     }
                   });
@@ -171,7 +172,7 @@ export const Graph = ({
               label: "每月營收",
               yAxisID: "y1",
               backgroundColor: "#FCDF9B",
-              data: graphData,
+              data: getDisplayGraphData(graphData),
               borderColor: "#F1AB02",
               borderWidth: 2,
             },

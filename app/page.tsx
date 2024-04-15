@@ -6,8 +6,9 @@ import { SideBar } from "./component/sideBar";
 import { Title } from "./component/title";
 import { useState } from "react";
 import { Graph } from "./component/graph";
-import { formatDate } from "./utils";
-import { SelectedStockType } from "./type";
+import { formatDate, stripFirstYear } from "./utils";
+import { GraphDataType, SelectedStockType } from "./type";
+import { DataTable } from "./component/dataTable";
 
 export default function Home() {
   const [selectedStock, setSelectedStock] = useState<SelectedStockType>({
@@ -15,7 +16,7 @@ export default function Home() {
     stockId: null,
   });
   const [startDate, setStartDate] = useState<string>(formatDate(5));
-  const [graphData, setGraphData] = useState<number[]>([]);
+  const [graphData, setGraphData] = useState<GraphDataType[]>([]);
   const [yoy, setYoy] = useState<number[]>([]);
 
   return (
@@ -49,6 +50,7 @@ export default function Home() {
             yoy={yoy}
             setYoy={setYoy}
           />
+          <DataTable graphData={stripFirstYear(graphData)}/>
         </Box>
       </Box>
     </Box>
