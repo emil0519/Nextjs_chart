@@ -15,11 +15,13 @@ import { getSepcificStockWithDate } from "../utils";
 interface PropsType {
   startDate: string;
   setSelectedStock: (selectedStock: string) => void;
+  setGraphData: (graphData: number[]) => void;
 }
 
 export const Header = ({
   startDate,
   setSelectedStock,
+  setGraphData,
 }: PropsType): React.ReactElement => {
   const fetchServices = new fetchService();
   const theme = useTheme();
@@ -58,7 +60,9 @@ export const Header = ({
         onChange={(_, value) => {
           if (value) {
             setSelectedStock(formatTitle(value));
-            getSepcificStockWithDate(value.stock_id, startDate);
+            getSepcificStockWithDate(value.stock_id, startDate).then((data) => {
+              if (data) setGraphData(data.map(monthlyData=>monthlyData.revenue));
+            });
           }
         }}
         clearOnBlur={false}

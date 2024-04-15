@@ -10,7 +10,9 @@ import { formatDate } from "./utils";
 
 export default function Home() {
   const [selectedStock, setSelectedStock] = useState<string>("請選擇股票");
-  const [startDate, setStartDate]=useState<string>(formatDate(5))
+  const [startDate, setStartDate] = useState<string>(formatDate(10));
+  const [graphData, setGraphData] = useState<number[]>([]);
+
   return (
     <Box
       sx={{
@@ -20,7 +22,11 @@ export default function Home() {
         minHeight: "100vh",
       }}
     >
-      <Header startDate={startDate} setSelectedStock={setSelectedStock} />
+      <Header
+        startDate={startDate}
+        setSelectedStock={setSelectedStock}
+        setGraphData={setGraphData}
+      />
       <Box
         component="main"
         sx={{ display: "flex", margin: "50px auto", gap: 5 }}
@@ -28,7 +34,7 @@ export default function Home() {
         <SideBar />
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <Title title={selectedStock} />
-          <Graph startDate={startDate} setStartDate={setStartDate}/>
+          <Graph startDate={startDate} setStartDate={setStartDate} graphData={graphData}/>
         </Box>
       </Box>
     </Box>

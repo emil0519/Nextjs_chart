@@ -5,7 +5,10 @@ export interface FetchServiceType {
   GetStockInfo(
     stockId: string
   ): Promise<ApiResponseType<DropDownApiDataType[]>["data"]>;
-  GetSpecificStockWithDate(stockId: string, startDate: string): Promise<GraphDataType[]>;
+  GetSpecificStockWithDate(
+    stockId: string,
+    startDate: string
+  ): Promise<GraphDataType[]>;
 }
 
 export class fetchService implements FetchServiceType {
@@ -36,12 +39,14 @@ export class fetchService implements FetchServiceType {
     const res = await fetch(
       `${this.finmindtradeDomain}?${
         FirmmindDataTypeEnum.TaiwanStockMonthRevenue
-      }&data_id=${stockId}&start_date=${startDate}&end_date=${formatDate(0)}&token=${this.finmindToken}`,
+      }&data_id=${stockId}&start_date=${formatDate(10)}&end_date=${formatDate(
+        0
+      )}&token=${this.finmindToken}`,
       {
         method: "GET",
       }
     );
     const data: ApiResponseType<GraphDataType[]> = await res.json();
-    return data.data
+    return data.data;
   }
 }
