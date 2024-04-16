@@ -25,6 +25,7 @@ import {
 } from "../utils";
 import { defaultErrorToastData } from "../constant";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { v4 as uuid } from "uuid";
 
 interface PropsType {
   startDate: string;
@@ -89,6 +90,14 @@ export const Header = ({
         aria-haspopup
         options={dropDownData}
         getOptionLabel={(option) => formatTitle(option)}
+        isOptionEqualToValue={(option, value) =>
+          option.stock_id === value.stock_id
+        }
+        renderOption={(props, option) => (
+          <li {...props} key={uuid()}>
+            {formatTitle(option)}
+          </li>
+        )}
         onChange={(_, value) => {
           changeParams(value?.stock_id);
           if (value) {
