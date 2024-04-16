@@ -44,3 +44,8 @@ export interface SelectedStockType {
   name: string;
   stockId: number | null;
 }
+
+export interface ErrorToastDataType {
+  isOpen: boolean;
+  errorMessage: string;
+}

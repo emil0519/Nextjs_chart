@@ -2,7 +2,7 @@
 import { Box, Button, Menu, MenuItem, useTheme } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useMemo, useState } from "react";
-import { yearsDropdownOptions } from "../constant";
+import { defaultErrorToastData, yearsDropdownOptions } from "../constant";
 import { Chart } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -23,10 +23,11 @@ import {
   getSepcificStockWithDate,
   getYearBeofore,
   getYearLabels,
+  openErrorToast,
   processYoy,
   stripFirstYear,
 } from "../utils";
-import { GraphDataType, SelectedStockType } from "../type";
+import { ErrorToastDataType, GraphDataType, SelectedStockType } from "../type";
 
 ChartJS.register(
   LinearScale,
@@ -48,6 +49,7 @@ interface PropsType {
   selectedStockId: SelectedStockType["stockId"];
   yoy: number[];
   setYoy: (yoy: number[]) => void;
+  setErrorToastData: (errorToastData: ErrorToastDataType) => void;
 }
 
 export const Graph = ({
@@ -58,6 +60,7 @@ export const Graph = ({
   selectedStockId,
   yoy,
   setYoy,
+  setErrorToastData,
 }: PropsType): React.ReactElement => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [buttonText, setButtonText] = useState<string>("近5年");
@@ -131,19 +134,35 @@ export const Graph = ({
                 closeMenu();
                 setButtonText(option.key);
                 setStartDate(option.value);
-                selectedStockId &&
-                  getSepcificStockWithDate(
-                    selectedStockId.toString(),
-                    // get both data for graph & data for yoy analysis at one api call
-                    // e.g. get data from 2020-04-15 to 2024-04-15 for yoy analysis
-                    // so comparasion could start for data of 2020-04-15 and 2021-04-15
-                    getYearBeofore(option.value)
-                  ).then((data) => {
-                    if (data) {
-                      setGraphData(stripFirstYear(data));
-                      setYoy(processYoy(data));
-                    }
-                  });
+                if (selectedStockId) {
+                  try {
+                    getSepcificStockWithDate(
+                      selectedStockId.toString(),
+                      // get both data for graph & data for yoy analysis at one api call
+                      // e.g. get data from 2020-04-15 to 2024-04-15 for yoy analysis
+                      // so comparasion could start for data of 2020-04-15 and 2021-04-15
+                      getYearBeofore(option.value)
+                    )
+                      .then((data) => {
+                        if (data) {
+                          setGraphData(stripFirstYear(data));
+                          setYoy(processYoy(data));
+                        } else {
+                          openErrorToast(setErrorToastData);
+                          setGraphData([]);
+                          setYoy([]);
+                        }
+                      })
+                      .catch((errors: any) => {
+                        openErrorToast(setErrorToastData, errors);
+                      });
+                  } finally {
+                    setTimeout(
+                      () => setErrorToastData(defaultErrorToastData),
+                      2000
+                    );
+                  }
+                }
               }}
             >
               {option.key}

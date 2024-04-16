@@ -1,5 +1,5 @@
 import { fetchService } from "./service/fetchService";
-import { GraphDataType } from "./type";
+import { GraphDataType, ErrorToastDataType } from "./type";
 
 export const formatDate = (yearsBefore: number): string => {
   const currentDate = new Date();
@@ -48,17 +48,10 @@ const generateLabelsWithSpace = (labels: string[]): string[] => {
 export const getSepcificStockWithDate = async (
   stockId: string,
   startDate: string
-) => {
+): Promise<GraphDataType[]> => {
   const fetchServices = new fetchService();
-  try {
-    const data = await fetchServices.GetSpecificStockWithDate(
-      stockId,
-      startDate
-    );
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
+  const data = await fetchServices.GetSpecificStockWithDate(stockId, startDate);
+  return data;
 };
 
 export const getYearBeofore = (startDate: string): string => {
@@ -94,3 +87,14 @@ const calculateYoyForEachMonth = (lastYear: number, thisYear: number): number =>
 
 export const addZero = (num: number): string =>
   num < 10 ? num.toString().padStart(2, "0") : num.toString();
+
+export const openErrorToast = (
+  setter: (openErrorToast: ErrorToastDataType) => void,
+  errors?: any,
+): void => {
+  setter({
+    isOpen: true,
+    errorMessage:
+      errors?.errorMesssage || errors?.message || "系統忙碌中，請稍候再試",
+  });
+};

@@ -1,6 +1,6 @@
 "use client";
 
-import { Box } from "@mui/material";
+import { Box, Snackbar } from "@mui/material";
 import { Header } from "./component/header";
 import { SideBar } from "./component/sideBar";
 import { Title } from "./component/title";
@@ -12,9 +12,11 @@ import {
   getYearBeofore,
   processYoy,
   stripFirstYear,
+  openErrorToast,
 } from "./utils";
-import { GraphDataType, SelectedStockType } from "./type";
+import { ErrorToastDataType, GraphDataType, SelectedStockType } from "./type";
 import { DataTable } from "./component/dataTable";
+import { defaultErrorToastData } from "./constant";
 
 export default function Home() {
   const [selectedStock, setSelectedStock] = useState<SelectedStockType>({
@@ -24,19 +26,29 @@ export default function Home() {
   const [startDate, setStartDate] = useState<string>(formatDate(5));
   const [graphData, setGraphData] = useState<GraphDataType[]>([]);
   const [yoy, setYoy] = useState<number[]>([]);
-
+  const [errorToastData, setErrorToastData] = useState<ErrorToastDataType>(
+    defaultErrorToastData
+  );
   // Set default search result upon entering the page
   useEffect(() => {
     setSelectedStock({
       name: "台積電(2330)",
       stockId: 2330,
     });
-    getSepcificStockWithDate("2330", getYearBeofore(startDate)).then((data) => {
-      if (data) {
-        setGraphData(stripFirstYear(data));
-        setYoy(processYoy(data));
-      }
-    });
+    try {
+      getSepcificStockWithDate("2330", getYearBeofore(startDate))
+        .then((data) => {
+          if (data) {
+            setGraphData(stripFirstYear(data));
+            setYoy(processYoy(data));
+          }
+        })
+        .catch((errors: any) => {
+          openErrorToast(setErrorToastData, errors);
+        });
+    } finally {
+      setTimeout(() => setErrorToastData(defaultErrorToastData), 2000);
+    }
   }, []);
 
   return (
@@ -53,6 +65,7 @@ export default function Home() {
         setSelectedStock={setSelectedStock}
         setGraphData={setGraphData}
         setYoy={setYoy}
+        setErrorToastData={setErrorToastData}
       />
       <Box
         component="main"
@@ -69,10 +82,17 @@ export default function Home() {
             selectedStockId={selectedStock.stockId}
             yoy={yoy}
             setYoy={setYoy}
+            setErrorToastData={setErrorToastData}
           />
           <DataTable graphData={graphData} yoy={yoy} />
         </Box>
       </Box>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={errorToastData.isOpen}
+        onClose={() => setErrorToastData(defaultErrorToastData)}
+        message={errorToastData.errorMessage}
+      />
     </Box>
   );
 }
