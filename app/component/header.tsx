@@ -55,6 +55,7 @@ export const Header = ({
         background: theme.background.white,
       }}
     >
+      {/* Search bar */}
       <Autocomplete
         sx={{
           width: 400,

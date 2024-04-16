@@ -23,7 +23,6 @@ import {
   getSepcificStockWithDate,
   getYearBeofore,
   getYearLabels,
-  getYearLabelsWithMonth,
   processYoy,
   stripFirstYear,
 } from "../utils";
