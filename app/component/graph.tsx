@@ -136,6 +136,7 @@ export const Graph = ({
               ticks: {
                 maxRotation: 0,
                 minRotation: 0,
+                autoSkip: false,
               },
             },
             y: {
