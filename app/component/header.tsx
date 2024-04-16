@@ -10,7 +10,12 @@ import { useDebouncedCallback } from "use-debounce";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { DropDownApiDataType, GraphDataType, SelectedStockType } from "../type";
 import { fetchService } from "../service/fetchService";
-import { getSepcificStockWithDate, getYearBeofore, processYoy } from "../utils";
+import {
+  getSepcificStockWithDate,
+  getYearBeofore,
+  processYoy,
+  stripFirstYear,
+} from "../utils";
 
 interface PropsType {
   startDate: string;
@@ -70,7 +75,7 @@ export const Header = ({
               getYearBeofore(startDate)
             ).then((data) => {
               if (data) {
-                setGraphData(data);
+                setGraphData(stripFirstYear(data));
                 setYoy(processYoy(data));
               }
             });

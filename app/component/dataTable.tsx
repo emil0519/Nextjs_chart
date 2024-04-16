@@ -8,15 +8,16 @@ import {
 } from "@mui/material";
 import { GraphDataType } from "../type";
 import { addZero } from "../utils";
+import { v4 as uuid } from "uuid";
 
-interface PropsType{
+interface PropsType {
   graphData: GraphDataType[];
-  yoy: number[]
+  yoy: number[];
 }
 
 export const DataTable = ({
   graphData,
-  yoy
+  yoy,
 }: PropsType): React.ReactElement => (
   <Box
     component="section"
@@ -44,8 +45,12 @@ export const DataTable = ({
         >
           <TableCell variant="head">年度月份</TableCell>
           {graphData.map((monthData) => (
-            <TableCell key={`title-${monthData.date}`} sx={{ fontWeight: "bold" }}>
-              {monthData.revenue_year}{addZero(monthData.revenue_month)}
+            <TableCell
+              key={`title-${monthData.date}`}
+              sx={{ fontWeight: "bold" }}
+            >
+              {monthData.revenue_year}
+              {addZero(monthData.revenue_month)}
             </TableCell>
           ))}
         </TableRow>
@@ -53,13 +58,19 @@ export const DataTable = ({
           sx={{ backgroundColor: "white", border: "1px solid #E7E8E8" }}
         >
           <TableCell variant="head">每月營收</TableCell>
-          {graphData.map(monthData=><TableCell key={`revenue-${monthData.date}`}>{monthData.revenue}</TableCell>)}
+          {graphData.map((monthData) => (
+            <TableCell key={`revenue-${monthData.date}`}>
+              {monthData.revenue}
+            </TableCell>
+          ))}
         </TableRow>
         <TableRow
           sx={{ backgroundColor: "#F6F8FA", border: "1px solid #E7E8E8" }}
         >
           <TableCell variant="head">單月營收年增率</TableCell>
-          {yoy.map(eachYoy=><TableCell key={`yoy-${eachYoy}`}>{eachYoy}</TableCell>)}
+          {yoy?.map((eachYoy) => (
+            <TableCell key={`yoy-${eachYoy}-${uuid()}`}>{eachYoy}</TableCell>
+          ))}
         </TableRow>
       </TableBody>
     </Table>

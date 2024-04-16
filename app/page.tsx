@@ -50,7 +50,7 @@ export default function Home() {
             yoy={yoy}
             setYoy={setYoy}
           />
-          <DataTable graphData={stripFirstYear(graphData)} yoy={yoy}/>
+          <DataTable graphData={graphData} yoy={yoy}/>
         </Box>
       </Box>
     </Box>
