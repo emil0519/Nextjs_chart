@@ -1,6 +1,6 @@
 "use client";
 
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
@@ -41,6 +41,7 @@ export const Header = ({
   setYoy,
   setErrorToastData,
 }: PropsType): React.ReactElement => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const fetchServices = new fetchService();
   const theme = useTheme();
   const [dropDownData, setDropDownData] = useState<DropDownApiDataType[]>([]);
@@ -49,10 +50,13 @@ export const Header = ({
   const { replace } = useRouter();
   const getDropDownData = useDebouncedCallback(async (input: string) => {
     try {
+      setIsLoading(true);
       const data = await fetchServices.GetStockInfo(input);
+      setIsLoading(false);
       setDropDownData(data);
-    } catch (err) {
-      console.log(err);
+    } catch (errors) {
+      setIsLoading(false);
+      openErrorToast(setErrorToastData, errors);
     }
   }, 500);
   const changeParams = (input: string | undefined): void => {
@@ -64,8 +68,6 @@ export const Header = ({
     }
     replace(`${pathName}?${params.toString()}`);
   };
-  
-
 
   return (
     <Box
@@ -88,7 +90,7 @@ export const Header = ({
         options={dropDownData}
         getOptionLabel={(option) => formatTitle(option)}
         onChange={(_, value) => {
-          changeParams(value?.stock_id)
+          changeParams(value?.stock_id);
           if (value) {
             setSelectedStock({
               name: formatTitle(value),
@@ -128,7 +130,11 @@ export const Header = ({
               ...params.InputProps,
               endAdornment: (
                 <InputAdornment position="end">
-                  <Search />
+                  {isLoading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : (
+                    <Search />
+                  )}
                 </InputAdornment>
               ),
             }}
