@@ -1,5 +1,5 @@
 "use client";
-import { Box, Button, Menu, MenuItem } from "@mui/material";
+import { Box, Button, Menu, MenuItem, useTheme } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useMemo, useState } from "react";
 import { yearsDropdownOptions } from "../constant";
@@ -63,6 +63,7 @@ export const Graph = ({
   const [buttonText, setButtonText] = useState<string>("近5年");
   const open = Boolean(anchorEl);
   const labels = useMemo(() => getYearLabels(startDate), [startDate]);
+  const theme = useTheme();
   const formattedLabel = useMemo(
     () =>
       graphData.map(
@@ -94,7 +95,7 @@ export const Graph = ({
     <Box
       component="section"
       sx={{
-        backgroundColor: "white",
+        backgroundColor: theme.color.white,
         border: "1px solid #DFDFDF",
         width: "100%",
         display: "flex",
@@ -201,9 +202,9 @@ export const Graph = ({
               type: "bar" as const,
               label: "每月營收",
               yAxisID: "y1",
-              backgroundColor: "#FCDF9B",
+              backgroundColor: theme.color.yellow,
               data: getDisplayGraphData(graphData),
-              borderColor: "#F1AB02",
+              borderColor: theme.color.darkYellow,
               borderWidth: 2,
             },
           ],
