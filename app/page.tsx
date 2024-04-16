@@ -13,10 +13,13 @@ import {
   processYoy,
   stripFirstYear,
   openErrorToast,
+  formatTitle,
 } from "./utils";
 import { ErrorToastDataType, GraphDataType, SelectedStockType } from "./type";
 import { DataTable } from "./component/dataTable";
 import { defaultErrorToastData } from "./constant";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { fetchService } from "./service/fetchService";
 
 export default function Home() {
   const [selectedStock, setSelectedStock] = useState<SelectedStockType>({
@@ -29,28 +32,53 @@ export default function Home() {
   const [errorToastData, setErrorToastData] = useState<ErrorToastDataType>(
     defaultErrorToastData
   );
-  // Set default search result upon entering the page
-  useEffect(() => {
-    setSelectedStock({
-      name: "台積電(2330)",
-      stockId: 2330,
-    });
-    try {
-      getSepcificStockWithDate("2330", getYearBeofore(startDate))
-        .then((data) => {
-          if (data) {
-            setGraphData(stripFirstYear(data));
-            setYoy(processYoy(data));
-          }
-        })
-        .catch((errors: any) => {
-          openErrorToast(setErrorToastData, errors);
-        });
-    } finally {
-      setTimeout(() => setErrorToastData(defaultErrorToastData), 2000);
-    }
-  }, []);
+  const fetchServices = new fetchService();
+  const searchParams = useSearchParams();
+  const pathName = usePathname();
+  const { replace } = useRouter();
 
+// Prefetch under 2 condition
+// 1. No query string: prefetch 2330 (TSMC) as default stock
+// 2. With query string: fetch data in query string
+  useEffect(() => {
+    const stock = searchParams.get("stock");
+    const defaultStock = "2330";
+  
+    const fetchData = async () => {
+      try {
+        const [stockInfo, specificStockData] = await Promise.all([
+          stock ? fetchServices.GetStockInfo(stock) : Promise.resolve(null),
+          getSepcificStockWithDate(stock || defaultStock, getYearBeofore(startDate))
+        ]);
+        if(stockInfo?.length === 0){
+          throw new Error("您輸入的股票編號不存在，請重新查詢")
+        }
+        if (stock && stockInfo) {
+          setSelectedStock({
+            name: formatTitle(stockInfo[0]),
+            stockId: Number(stock)
+          });
+        } else {
+          setSelectedStock({
+            name: "台積電(2330)",
+            stockId: 2330,
+          });
+        replace(`${pathName}?stock=2330`);
+        }
+        if (specificStockData) {
+          setGraphData(stripFirstYear(specificStockData));
+          setYoy(processYoy(specificStockData));
+        }
+      } catch (errors) {
+        openErrorToast(setErrorToastData, errors);
+      } finally {
+        setTimeout(() => setErrorToastData(defaultErrorToastData), 2000);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
   return (
     <Box
       sx={{

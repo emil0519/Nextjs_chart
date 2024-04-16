@@ -1,5 +1,5 @@
 import { fetchService } from "./service/fetchService";
-import { GraphDataType, ErrorToastDataType } from "./type";
+import { GraphDataType, ErrorToastDataType, DropDownApiDataType } from "./type";
 
 export const formatDate = (yearsBefore: number): string => {
   const currentDate = new Date();
@@ -98,3 +98,6 @@ export const openErrorToast = (
       errors?.errorMesssage || errors?.message || "系統忙碌中，請稍候再試",
   });
 };
+
+export const formatTitle = (option: DropDownApiDataType): string =>
+`${option.stock_name}(${option.stock_id})`;
