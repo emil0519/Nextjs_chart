@@ -10,7 +10,8 @@ export const formatDate = (yearsBefore: number): string => {
 };
 
 /**
- * Get label for chart.js
+ * Get label for chart.js format;
+ * References: https://github.com/chartjs/Chart.js/issues/12
  * @param startDate e.g. 2021-01-12, must in the format of YYYY-MM-DD
  * @returns label fill with spaces to for chart.js to map data points correctly e.g. ["2021","","","2022",...]
  */

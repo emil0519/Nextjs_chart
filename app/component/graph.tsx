@@ -15,12 +15,15 @@ import {
   Tooltip,
   LineController,
   BarController,
+  TooltipItem,
+  ChartType,
 } from "chart.js";
 import {
   getDisplayGraphData,
   getSepcificStockWithDate,
   getYearBeofore,
   getYearLabels,
+  getYearLabelsWithMonth,
   processYoy,
   stripFirstYear,
 } from "../utils";
@@ -61,12 +64,32 @@ export const Graph = ({
   const [buttonText, setButtonText] = useState<string>("近5年");
   const open = Boolean(anchorEl);
   const labels = useMemo(() => getYearLabels(startDate), [startDate]);
-
+  const formattedLabel = useMemo(
+    () =>
+      graphData.map(
+        (monthData) => `${monthData.revenue_year}年${monthData.revenue_month}月`
+      ),
+    [graphData]
+  );
   const openMenu: (event: React.MouseEvent<HTMLButtonElement>) => void = (
     event
   ) => setAnchorEl(event.currentTarget);
 
   const closeMenu = (): void => setAnchorEl(null);
+  const footer = (tooltipItems: TooltipItem<ChartType>[]) => {
+    const datasetIndex = tooltipItems[0].datasetIndex;
+    const dataIndex = tooltipItems[0].dataIndex;
+    // referring to first dataset pass in data props
+    if (datasetIndex === 0) {
+      return `${formattedLabel[dataIndex]}的單月營收年增率 = ${tooltipItems[0].dataset.data[dataIndex]}`;
+    }
+    // referring to second dataset pass in data props
+    if (datasetIndex === 1) {
+      return `${
+        formattedLabel[dataIndex]
+      }的營收 = ${tooltipItems[0].dataset.data[dataIndex]?.toLocaleString()}`;
+    }
+  };
 
   return (
     <Box
@@ -131,6 +154,13 @@ export const Graph = ({
       <Chart
         type="bar"
         options={{
+          plugins: {
+            tooltip: {
+              callbacks: {
+                footer: footer,
+              },
+            },
+          },
           scales: {
             x: {
               ticks: {

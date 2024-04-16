@@ -60,7 +60,7 @@ export const DataTable = ({
           <TableCell variant="head">每月營收</TableCell>
           {graphData.map((monthData) => (
             <TableCell key={`revenue-${monthData.date}`}>
-              {monthData.revenue}
+              {monthData.revenue.toLocaleString()}
             </TableCell>
           ))}
         </TableRow>
