@@ -37,33 +37,36 @@ export default function Home() {
   const pathName = usePathname();
   const { replace } = useRouter();
 
-// Prefetch under 2 condition
-// 1. No query string: prefetch 2330 (TSMC) as default stock
-// 2. With query string: fetch data in query string
+  // Prefetch under 2 condition
+  // 1. No query string: prefetch 2330 (TSMC) as default stock
+  // 2. With query string: fetch data in query string
   useEffect(() => {
     const stock = searchParams.get("stock");
     const defaultStock = "2330";
-  
+
     const fetchData = async () => {
       try {
         const [stockInfo, specificStockData] = await Promise.all([
           stock ? fetchServices.GetStockInfo(stock) : Promise.resolve(null),
-          getSepcificStockWithDate(stock || defaultStock, getYearBeofore(startDate))
+          getSepcificStockWithDate(
+            stock || defaultStock,
+            getYearBeofore(startDate)
+          ),
         ]);
-        if(stockInfo?.length === 0){
-          throw new Error("您輸入的股票編號不存在，請重新查詢")
+        if (stockInfo?.length === 0 || specificStockData?.length === 0) {
+          throw new Error("您輸入的股票編號不存在，請重新查詢");
         }
         if (stock && stockInfo) {
           setSelectedStock({
             name: formatTitle(stockInfo[0]),
-            stockId: Number(stock)
+            stockId: Number(stock),
           });
         } else {
           setSelectedStock({
             name: "台積電(2330)",
             stockId: 2330,
           });
-        replace(`${pathName}?stock=2330`);
+          replace(`${pathName}?stock=2330`);
         }
         if (specificStockData) {
           setGraphData(stripFirstYear(specificStockData));
@@ -75,10 +78,10 @@ export default function Home() {
         setTimeout(() => setErrorToastData(defaultErrorToastData), 2000);
       }
     };
-  
+
     fetchData();
   }, []);
-  
+
   return (
     <Box
       sx={{
