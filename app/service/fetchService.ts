@@ -33,9 +33,6 @@ export class fetchService implements FetchServiceType {
     stockId: string,
     startDate: string
   ): Promise<GraphDataType[]> {
-    const currentDate = new Date();
-    const fiveYearsAgo = new Date(currentDate);
-    fiveYearsAgo.setFullYear(currentDate.getFullYear() - 5);
     const res = await fetch(
       `${this.finmindtradeDomain}?${
         FirmmindDataTypeEnum.TaiwanStockMonthRevenue

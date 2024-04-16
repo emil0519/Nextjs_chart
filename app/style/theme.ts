@@ -1,29 +1,31 @@
 'use client';
-import { Roboto } from 'next/font/google';
 import { createTheme } from '@mui/material/styles';
-
-const roboto = Roboto({
-  weight: ['300', '400', '500', '700'],
-  subsets: ['latin'],
-  display: 'swap',
-});
 
 declare module '@mui/material/styles' {
   interface Theme {
-    background: {
+    color: {
       white: string;
+      yellow: string;
+      darkYellow: string;
+      red: string;
     };
   }
   interface ThemeOptions {
-    background?: {
-      white?: string;
+    color: {
+      white: string;
+      yellow: string;
+      darkYellow: string;
+      red: string;
     };
   }
 }
 
 const theme = createTheme({
-  background:{
-    white: 'white'
+  color:{
+    white: 'white',
+    yellow: '#FCDF9B',
+    darkYellow: "#F1AB02",
+    red: "#CB4B4B"
   }
 });
 

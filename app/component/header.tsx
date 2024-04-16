@@ -1,27 +1,38 @@
 "use client";
 
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 import { InputAdornment } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import { useDebouncedCallback } from "use-debounce";
-import React, { Dispatch, SetStateAction, useState } from "react";
-import { DropDownApiDataType, GraphDataType, SelectedStockType } from "../type";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import {
+  DropDownApiDataType,
+  GraphDataType,
+  ErrorToastDataType,
+  SelectedStockType,
+} from "../type";
 import { fetchService } from "../service/fetchService";
 import {
+  formatTitle,
   getSepcificStockWithDate,
   getYearBeofore,
+  openErrorToast,
   processYoy,
   stripFirstYear,
 } from "../utils";
+import { defaultErrorToastData } from "../constant";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { v4 as uuid } from "uuid";
 
 interface PropsType {
   startDate: string;
   setSelectedStock: Dispatch<SetStateAction<SelectedStockType>>;
   setGraphData: (graphData: GraphDataType[]) => void;
   setYoy: (yoy: number[]) => void;
+  setErrorToastData: (errorToastData: ErrorToastDataType) => void;
 }
 
 export const Header = ({
@@ -29,21 +40,35 @@ export const Header = ({
   setSelectedStock,
   setGraphData,
   setYoy,
+  setErrorToastData,
 }: PropsType): React.ReactElement => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const fetchServices = new fetchService();
   const theme = useTheme();
   const [dropDownData, setDropDownData] = useState<DropDownApiDataType[]>([]);
+  const searchParams = useSearchParams();
+  const pathName = usePathname();
+  const { replace } = useRouter();
   const getDropDownData = useDebouncedCallback(async (input: string) => {
     try {
+      setIsLoading(true);
       const data = await fetchServices.GetStockInfo(input);
+      setIsLoading(false);
       setDropDownData(data);
-    } catch (err) {
-      console.log(err);
+    } catch (errors) {
+      setIsLoading(false);
+      openErrorToast(setErrorToastData, errors);
     }
   }, 500);
-
-  const formatTitle = (option: DropDownApiDataType): string =>
-    `${option.stock_name}(${option.stock_id})`;
+  const changeParams = (input: string | undefined): void => {
+    const params = new URLSearchParams(searchParams);
+    if (input) {
+      params.set("stock", input);
+    } else {
+      params.delete("stock");
+    }
+    replace(`${pathName}?${params.toString()}`);
+  };
 
   return (
     <Box
@@ -52,9 +77,10 @@ export const Header = ({
         width: "100%",
         display: "flex",
         justifyContent: "center",
-        background: theme.background.white,
+        background: theme.color.white,
       }}
     >
+      {/* Search bar */}
       <Autocomplete
         sx={{
           width: 400,
@@ -64,21 +90,42 @@ export const Header = ({
         aria-haspopup
         options={dropDownData}
         getOptionLabel={(option) => formatTitle(option)}
+        isOptionEqualToValue={(option, value) =>
+          option.stock_id === value.stock_id
+        }
+        renderOption={(props, option) => (
+          <li {...props} key={uuid()}>
+            {formatTitle(option)}
+          </li>
+        )}
         onChange={(_, value) => {
+          changeParams(value?.stock_id);
           if (value) {
             setSelectedStock({
               name: formatTitle(value),
               stockId: Number(value.stock_id),
             });
-            getSepcificStockWithDate(
-              value.stock_id,
-              getYearBeofore(startDate)
-            ).then((data) => {
-              if (data) {
-                setGraphData(stripFirstYear(data));
-                setYoy(processYoy(data));
-              }
-            });
+            try {
+              getSepcificStockWithDate(
+                value.stock_id,
+                getYearBeofore(startDate)
+              )
+                .then((data) => {
+                  if (data?.length) {
+                    setGraphData(stripFirstYear(data));
+                    setYoy(processYoy(data));
+                  } else {
+                    openErrorToast(setErrorToastData);
+                    setGraphData([]);
+                    setYoy([]);
+                  }
+                })
+                .catch((errors: any) => {
+                  openErrorToast(setErrorToastData, errors);
+                });
+            } finally {
+              setTimeout(() => setErrorToastData(defaultErrorToastData), 2000);
+            }
           }
         }}
         clearOnBlur={false}
@@ -92,7 +139,11 @@ export const Header = ({
               ...params.InputProps,
               endAdornment: (
                 <InputAdornment position="end">
-                  <Search />
+                  {isLoading ? (
+                    <CircularProgress color="inherit" size={20} />
+                  ) : (
+                    <Search />
+                  )}
                 </InputAdornment>
               ),
             }}

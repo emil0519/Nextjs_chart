@@ -44,3 +44,8 @@ export const yearsDropdownOptions: KeyValueType[] = [
     value: formatDate(10),
   },
 ];
+
+export const defaultErrorToastData = {
+  isOpen: false,
+  errorMessage: "",
+};

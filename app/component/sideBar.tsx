@@ -6,8 +6,8 @@ import { Category } from "./category";
 import { mainCateoryList, subCateoryList } from "../constant";
 
 export const SideBar = (): React.ReactElement => {
-  const [selectedMainCategory, setSelectedMainCategory] = useState<string>("");
-  const [selectedSubCategory, setSelectedSubCategory] = useState<string>("");
+  const [selectedMainCategory, setSelectedMainCategory] = useState<string>("B");
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string>("每月營收");
   return (
     <Box component="aside" sx={{ display: "flex", gap: 1 }}>
       <Box
