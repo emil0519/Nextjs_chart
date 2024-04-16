@@ -25,6 +25,16 @@ export default function RootLayout({
           <GlobalStyles
             styles={{
               body: { background: "#EDEDED", padding:0 },
+              '*::-webkit-scrollbar': {
+                width: "8px",
+              },
+              '*::-webkit-scrollbar-track': {
+                backgroundColor: 'white', 
+              },
+              '*::-webkit-scrollbar-thumb': {
+                backgroundColor: 'darkgrey', 
+                borderRadius: '4px',
+              },
             }}
           />
           <ThemeProvider theme={theme}>{children}</ThemeProvider>
