@@ -4,9 +4,15 @@ import { Box } from "@mui/material";
 import { Header } from "./component/header";
 import { SideBar } from "./component/sideBar";
 import { Title } from "./component/title";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Graph } from "./component/graph";
-import { formatDate, stripFirstYear } from "./utils";
+import {
+  formatDate,
+  getSepcificStockWithDate,
+  getYearBeofore,
+  processYoy,
+  stripFirstYear,
+} from "./utils";
 import { GraphDataType, SelectedStockType } from "./type";
 import { DataTable } from "./component/dataTable";
 
@@ -18,6 +24,20 @@ export default function Home() {
   const [startDate, setStartDate] = useState<string>(formatDate(5));
   const [graphData, setGraphData] = useState<GraphDataType[]>([]);
   const [yoy, setYoy] = useState<number[]>([]);
+
+  // Set default search result upon entering the page
+  useEffect(() => {
+    setSelectedStock({
+      name: "台積電(2330)",
+      stockId: 2330,
+    });
+    getSepcificStockWithDate("2330", getYearBeofore(startDate)).then((data) => {
+      if (data) {
+        setGraphData(stripFirstYear(data));
+        setYoy(processYoy(data));
+      }
+    });
+  }, []);
 
   return (
     <Box
@@ -50,7 +70,7 @@ export default function Home() {
             yoy={yoy}
             setYoy={setYoy}
           />
-          <DataTable graphData={graphData} yoy={yoy}/>
+          <DataTable graphData={graphData} yoy={yoy} />
         </Box>
       </Box>
     </Box>
