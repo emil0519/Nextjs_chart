@@ -10,7 +10,8 @@ export const formatDate = (yearsBefore: number): string => {
 };
 
 /**
- * Get label for chart.js
+ * Get label for chart.js format;
+ * References: https://github.com/chartjs/Chart.js/issues/12
  * @param startDate e.g. 2021-01-12, must in the format of YYYY-MM-DD
  * @returns label fill with spaces to for chart.js to map data points correctly e.g. ["2021","","","2022",...]
  */
@@ -66,8 +67,11 @@ export const getYearBeofore = (startDate: string): string => {
   return date.toISOString().slice(0, 10);
 };
 
-export const stripFirstYearRevenue = (data: GraphDataType[]): number[] =>
-  data.slice(12).map((monthlyData) => monthlyData.revenue);
+export const stripFirstYear = (data: GraphDataType[]): GraphDataType[] =>
+  data.slice(12);
+
+export const getDisplayGraphData = (data: GraphDataType[]): number[] =>
+  data.map((monthlyData) => monthlyData.revenue);
 
 export const processYoy = (data: GraphDataType[]): number[] => {
   let currentMonth = 12;
@@ -87,3 +91,6 @@ export const processYoy = (data: GraphDataType[]): number[] => {
 
 const calculateYoyForEachMonth = (lastYear: number, thisYear: number): number =>
   Number(((thisYear / lastYear - 1) * 100).toFixed(2));
+
+export const addZero = (num: number): string =>
+  num < 10 ? num.toString().padStart(2, "0") : num.toString();

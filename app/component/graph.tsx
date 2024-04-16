@@ -15,15 +15,19 @@ import {
   Tooltip,
   LineController,
   BarController,
+  TooltipItem,
+  ChartType,
 } from "chart.js";
 import {
+  getDisplayGraphData,
   getSepcificStockWithDate,
   getYearBeofore,
   getYearLabels,
+  getYearLabelsWithMonth,
   processYoy,
-  stripFirstYearRevenue,
+  stripFirstYear,
 } from "../utils";
-import { SelectedStockType } from "../type";
+import { GraphDataType, SelectedStockType } from "../type";
 
 ChartJS.register(
   LinearScale,
@@ -40,8 +44,8 @@ ChartJS.register(
 interface PropsType {
   startDate: string;
   setStartDate: (startDate: string) => void;
-  graphData: number[];
-  setGraphData: (graphData: number[]) => void;
+  graphData: GraphDataType[];
+  setGraphData: (graphData: GraphDataType[]) => void;
   selectedStockId: SelectedStockType["stockId"];
   yoy: number[];
   setYoy: (yoy: number[]) => void;
@@ -60,12 +64,32 @@ export const Graph = ({
   const [buttonText, setButtonText] = useState<string>("近5年");
   const open = Boolean(anchorEl);
   const labels = useMemo(() => getYearLabels(startDate), [startDate]);
-
+  const formattedLabel = useMemo(
+    () =>
+      graphData.map(
+        (monthData) => `${monthData.revenue_year}年${monthData.revenue_month}月`
+      ),
+    [graphData]
+  );
   const openMenu: (event: React.MouseEvent<HTMLButtonElement>) => void = (
     event
   ) => setAnchorEl(event.currentTarget);
 
   const closeMenu = (): void => setAnchorEl(null);
+  const footer = (tooltipItems: TooltipItem<ChartType>[]) => {
+    const datasetIndex = tooltipItems[0].datasetIndex;
+    const dataIndex = tooltipItems[0].dataIndex;
+    // referring to first dataset pass in data props
+    if (datasetIndex === 0) {
+      return `${formattedLabel[dataIndex]}的單月營收年增率 = ${tooltipItems[0].dataset.data[dataIndex]}`;
+    }
+    // referring to second dataset pass in data props
+    if (datasetIndex === 1) {
+      return `${
+        formattedLabel[dataIndex]
+      }的營收 = ${tooltipItems[0].dataset.data[dataIndex]?.toLocaleString()}`;
+    }
+  };
 
   return (
     <Box
@@ -116,7 +140,7 @@ export const Graph = ({
                     getYearBeofore(option.value)
                   ).then((data) => {
                     if (data) {
-                      setGraphData(stripFirstYearRevenue(data));
+                      setGraphData(stripFirstYear(data));
                       setYoy(processYoy(data));
                     }
                   });
@@ -130,11 +154,19 @@ export const Graph = ({
       <Chart
         type="bar"
         options={{
+          plugins: {
+            tooltip: {
+              callbacks: {
+                footer: footer,
+              },
+            },
+          },
           scales: {
             x: {
               ticks: {
                 maxRotation: 0,
                 minRotation: 0,
+                autoSkip: false,
               },
             },
             y: {
@@ -171,7 +203,7 @@ export const Graph = ({
               label: "每月營收",
               yAxisID: "y1",
               backgroundColor: "#FCDF9B",
-              data: graphData,
+              data: getDisplayGraphData(graphData),
               borderColor: "#F1AB02",
               borderWidth: 2,
             },
