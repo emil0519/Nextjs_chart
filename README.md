@@ -1,6 +1,6 @@
 <div align="center">
 
-  <h3 align="center">Emil - StarkTech前端評測 </h3>
+  <h3 align="center">Emil - Next.js Chart </h3>
 
   <p align="center">
     A mock on stock displaying website, featuring graphs, tables and Next.js URL search params.
