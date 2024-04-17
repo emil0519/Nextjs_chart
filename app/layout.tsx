@@ -9,7 +9,7 @@ import { GlobalStyles, CssBaseline } from "@mui/material";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Emil - StarkTech前端評測",
+  title: "Emil - Next.js Chart",
 };
 
 export default function RootLayout({
