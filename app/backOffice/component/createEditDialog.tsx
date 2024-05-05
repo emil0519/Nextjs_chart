@@ -56,7 +56,6 @@ export default function CreateEditDialog({ isOpen, setIsOpen }: PropsType) {
         });
       }
     } catch (errors) {
-      console.log(errors);
       openErrorToast(setToastData, errors);
     } finally {
       setTimeout(() => {

@@ -53,3 +53,9 @@ export const defaultErrorToastData = {
   isOpen: false,
   errorMessage: "",
 };
+
+export const defaultDeleteDialog = {
+  isOpen: false,
+  message: "",
+  stockId: "",
+};

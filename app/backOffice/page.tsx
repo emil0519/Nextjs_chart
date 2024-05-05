@@ -5,8 +5,12 @@ import Information from "./component/information";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { useEffect, useState } from "react";
 import { fetchService } from "../service/fetchService";
-import { DropDownApiDataType, ErrorToastDataType } from "../type";
-import { defaultErrorToastData } from "../constant";
+import {
+  DefaultDialogType,
+  DropDownApiDataType,
+  ErrorToastDataType,
+} from "../type";
+import { defaultDeleteDialog, defaultErrorToastData } from "../constant";
 import { openErrorToast } from "../utils";
 import TableComponennt from "./component/tableComponent/tableComponent";
 import dayjs from "dayjs";
@@ -14,6 +18,7 @@ import { GroupItem } from "./component/tableComponent/type";
 import { useDebouncedCallback } from "use-debounce";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import CreateEditDialog from "./component/createEditDialog";
+import DeleteDialog from "./component/deleteDialog";
 
 export default function Page() {
   const fetchServices = new fetchService();
@@ -23,6 +28,9 @@ export default function Page() {
   );
   const [tableData, setTableData] = useState<GroupItem[] | null>(null);
   const [isOpenCreateEdit, setIsOpenCreateEdit] = useState<boolean>(false);
+  const [deleteDialogData, setDeleteDialogData] =
+    useState<DefaultDialogType>(defaultDeleteDialog);
+
   const searchParams = useSearchParams();
   const pathName = usePathname();
   const { replace } = useRouter();
@@ -95,6 +103,25 @@ export default function Page() {
             </Typography>
           ),
         },
+        {
+          // 動作
+          id: `column-${index}-5`,
+          cell: (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <Button variant="outlined" sx={{ width: "fit-content" }}>
+                編輯
+              </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                sx={{ width: "fit-content" }}
+                onClick={() => openDeleteDialog(item.stock_id, item.stock_name)}
+              >
+                刪除
+              </Button>
+            </Box>
+          ),
+        },
       ],
     }));
 
@@ -115,6 +142,14 @@ export default function Page() {
     }
   };
 
+  const openDeleteDialog = async (stockId: string, stockName: string) => {
+    setDeleteDialogData({
+      isOpen: true,
+      message: `是否確認刪除股票 ${stockId} ${stockName} ?`,
+      stockId,
+    });
+  };
+
   const handleInputChange = useDebouncedCallback((input: string) => {
     setInputStock(input);
     const params = new URLSearchParams(searchParams);
@@ -131,7 +166,6 @@ export default function Page() {
   useEffect(() => {
     fetchStock(inputStock);
   }, []);
-
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
@@ -153,7 +187,7 @@ export default function Page() {
             height: "fit-content",
             marginRight: "5%",
           }}
-          onClick={()=>setIsOpenCreateEdit(true)}
+          onClick={() => setIsOpenCreateEdit(true)}
         >
           <Typography component="h4">新增股票</Typography>
         </Button>
@@ -220,6 +254,10 @@ export default function Page() {
                 id: 3,
                 content: <Box maxWidth="150px">建立時間</Box>,
               },
+              {
+                id: 4,
+                content: <Box maxWidth="50px">動作</Box>,
+              },
             ]}
             bodys={tableData}
           />
@@ -231,7 +269,15 @@ export default function Page() {
         onClose={() => setErrorToastData(defaultErrorToastData)}
         message={errorToastData.errorMessage}
       />
-      <CreateEditDialog isOpen={isOpenCreateEdit} setIsOpen={setIsOpenCreateEdit}/>
+      <CreateEditDialog
+        isOpen={isOpenCreateEdit}
+        setIsOpen={setIsOpenCreateEdit}
+      />
+      <DeleteDialog
+        deleteDialogData={deleteDialogData}
+        setDeleteDialogData={setDeleteDialogData}
+        fetchStock={fetchStock}
+      />
     </Box>
   );
 }

@@ -8,6 +8,9 @@ export interface FetchServiceType {
   MockGetStockInfo(
     stockInfo: string
   ): Promise<ApiResponseType<DropDownApiDataType[]>["data"]>;
+  MockDeleteStockInfo(
+    stockId: string
+  ): Promise<number>;
   GetStockInfo(
     stockId: string
   ): Promise<ApiResponseType<DropDownApiDataType[]>["data"]>;
@@ -83,6 +86,19 @@ export class fetchService implements FetchServiceType {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(createData),
+    });
+    return res.status;
+  }
+
+  public async MockDeleteStockInfo(
+    stockId: string
+  ): Promise<number> {
+    const res = await fetch(`${this.localhost}/${MockApiTypeEnum.basicInfo}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({stock_id: stockId}),
     });
     return res.status;
   }

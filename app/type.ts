@@ -57,3 +57,8 @@ export interface ErrorToastDataType {
   errorMessage: string;
 }
 
+export interface DefaultDialogType{
+  isOpen: boolean;
+  message: string;
+  stockId:string;
+};
