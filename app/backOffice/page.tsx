@@ -1,8 +1,111 @@
-import { Box, Button, Input, Typography } from "@mui/material";
-import Information from "./component/information";
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+"use client";
 
-export default async function Page() {
+import { Box, Button, Input, Snackbar, Typography } from "@mui/material";
+import Information from "./component/information";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import { useEffect, useState } from "react";
+import { fetchService } from "../service/fetchService";
+import { DropDownApiDataType, ErrorToastDataType } from "../type";
+import { defaultErrorToastData } from "../constant";
+import { openErrorToast } from "../utils";
+import TableComponennt from "./component/tableComponent/tableComponent";
+import dayjs from "dayjs";
+import { GroupItem } from "./component/tableComponent/type";
+import { useDebouncedCallback } from 'use-debounce';
+
+export default function Page() {
+  const fetchServices = new fetchService();
+  const [inputStock, setInputStock] = useState<string>("");
+  const [errorToastData, setErrorToastData] = useState<ErrorToastDataType>(
+    defaultErrorToastData
+  );
+  const [tableData, setTableData] = useState<GroupItem[] | null>(
+    null
+  );
+  const generateTableBody = (body:DropDownApiDataType[]):GroupItem[] =>
+    body.map((item, index) => ({
+      rowId: `row-${index}`,
+      columns: [
+          {
+              // 股票編號
+              id: `column-${item.stock_id}-1`,
+              cell: (
+                  <Typography
+                      component="p"
+                      sx={{
+                          color: "#40425A",
+                          fontSize: "14px",
+                          fontFamily: "Noto Sans TC",
+                      }}
+                  >
+                      {item.stock_id}
+                  </Typography>
+              ),
+          },
+          {
+              // 產業
+              id: `column-${item.industry_category}-2`,
+              cell: (
+                <Typography
+                    component="p"
+                    sx={{
+                        color: "#40425A",
+                        fontSize: "14px",
+                        fontFamily: "Noto Sans TC",
+                    }}
+                >
+                    {item.industry_category}
+                </Typography>
+            ),
+          },
+          {
+              // 股票名稱
+              id: `column-${item.stock_name}-3`,
+              cell: (
+                <Typography
+                component="p"
+                sx={{
+                    color: "#40425A",
+                    fontSize: "14px",
+                    fontFamily: "Noto Sans TC",
+                }}
+            >
+                {item.stock_name}
+            </Typography>
+              ),
+          },
+          {
+              // 建立時間
+              id: `column-${item.date}-4`,
+              cell: (
+                <Typography
+                component="p"
+                sx={{
+                    color: "#40425A",
+                    fontSize: "14px",
+                    fontFamily: "Noto Sans TC",
+                }}
+            >
+                {dayjs(item.date).format("YYYY/MM/DD HH:mm")}
+            </Typography>
+              ),
+          },
+      ],
+  }));
+  
+  const fetchStock = async (stock: string) => {
+    try {
+      const result = await fetchServices.MockGetStockInfo(stock);
+      setTableData(generateTableBody(result));
+    } catch (errors) {
+      openErrorToast(setErrorToastData, errors);
+    } finally {
+      setTimeout(() => setErrorToastData(defaultErrorToastData), 2000);
+    }
+  };
+  useEffect(() => {
+    fetchStock(inputStock);
+  }, [inputStock]);
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <Box
@@ -52,10 +155,46 @@ export default async function Page() {
           股票編號/名稱
         </Typography>
         <Box sx={{ display: "flex", gap: "12px" }}>
-          <Input placeholder="輸入股票編號/名稱，留空即搜尋所有股票" sx={{width:"300px"}}/>
-          <Button variant='outlined' sx={{display:'flex', gap:'4px'}}><SearchOutlinedIcon /><Typography component='p' sx={{fontSize:'12px'}}>查詢</Typography></Button>
+          <Input
+            placeholder="輸入股票編號/名稱，留空即搜尋所有股票"
+            sx={{ width: "300px" }}
+          />
+          <Button variant="outlined" sx={{ display: "flex", gap: "4px" }}>
+            <SearchOutlinedIcon />
+            <Typography component="p" sx={{ fontSize: "12px" }}>
+              查詢
+            </Typography>
+          </Button>
         </Box>
       </Box>
+      {tableData && <Box sx={{margin:"24px"}}><TableComponennt
+        headers={[
+          {
+            id: 0,
+            content: <Box maxWidth="150px">股票編號</Box>,
+          },
+          {
+            id: 1,
+            content: <Box maxWidth="150px">產業</Box>,
+          },
+          {
+            id: 2,
+            content: <Box maxWidth="150px">股票名稱</Box>,
+
+          },
+          {
+            id: 3,
+            content: <Box maxWidth="150px">建立時間</Box>,
+          },
+        ]}
+        bodys={tableData}
+      /></Box>}
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={errorToastData.isOpen}
+        onClose={() => setErrorToastData(defaultErrorToastData)}
+        message={errorToastData.errorMessage}
+      />
     </Box>
   );
 }

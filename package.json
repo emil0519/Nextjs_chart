@@ -17,6 +17,7 @@
     "@mui/material": "^5.15.15",
     "@mui/material-nextjs": "^5.15.11",
     "chart.js": "^4.4.2",
+    "dayjs": "^1.11.11",
     "jsdoc": "^4.0.2",
     "next": "14.0.0",
     "react": "^18",

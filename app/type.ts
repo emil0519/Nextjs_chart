@@ -56,3 +56,4 @@ export interface ErrorToastDataType {
   isOpen: boolean;
   errorMessage: string;
 }
+
