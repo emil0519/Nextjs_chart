@@ -1,4 +1,4 @@
-import { CategoryListType, KeyValueType, SubCategoryListType } from "./type";
+import { BackOfficeListType, CategoryListType, KeyValueType, SubCategoryListType } from "./type";
 import { formatDate } from "./utils";
 
 export enum FirmmindDataTypeEnum {
@@ -28,6 +28,11 @@ export const subCateoryList: SubCategoryListType[] = [
   { desc: "現金流量表" },
   { desc: "股利政策" },
   { desc: "電子書" },
+];
+
+export const backOfficeCategoryList : BackOfficeListType[] = [
+  { desc: "查詢股票資料", href:"/backoOffice/" },
+  // { desc: "建立股票", href: "backOffice/create" },
 ];
 
 export const yearsDropdownOptions: KeyValueType[] = [
