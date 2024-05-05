@@ -13,6 +13,7 @@ import dayjs from "dayjs";
 import { GroupItem } from "./component/tableComponent/type";
 import { useDebouncedCallback } from "use-debounce";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import CreateEditDialog from "./component/createEditDialog";
 
 export default function Page() {
   const fetchServices = new fetchService();
@@ -21,6 +22,7 @@ export default function Page() {
     defaultErrorToastData
   );
   const [tableData, setTableData] = useState<GroupItem[] | null>(null);
+  const [isOpenCreateEdit, setIsOpenCreateEdit] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const pathName = usePathname();
   const { replace } = useRouter();
@@ -130,7 +132,6 @@ export default function Page() {
     fetchStock(inputStock);
   }, []);
 
-  useEffect(()=>console.log(errorToastData,'errorToastData'),[errorToastData])
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
@@ -152,6 +153,7 @@ export default function Page() {
             height: "fit-content",
             marginRight: "5%",
           }}
+          onClick={()=>setIsOpenCreateEdit(true)}
         >
           <Typography component="h4">新增股票</Typography>
         </Button>
@@ -229,6 +231,7 @@ export default function Page() {
         onClose={() => setErrorToastData(defaultErrorToastData)}
         message={errorToastData.errorMessage}
       />
+      <CreateEditDialog isOpen={isOpenCreateEdit} setIsOpen={setIsOpenCreateEdit}/>
     </Box>
   );
 }

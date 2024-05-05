@@ -32,7 +32,6 @@ export const subCateoryList: SubCategoryListType[] = [
 
 export const backOfficeCategoryList : BackOfficeListType[] = [
   { desc: "查詢股票資料", href:"/backoOffice/" },
-  // { desc: "建立股票", href: "backOffice/create" },
 ];
 
 export const yearsDropdownOptions: KeyValueType[] = [
