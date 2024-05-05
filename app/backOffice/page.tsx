@@ -180,11 +180,11 @@ export default function Page() {
         }}
       >
         <Typography component="h5" sx={{ fontSize: "14px" }}>
-          股票編號/名稱
+          股票編號
         </Typography>
         <Box sx={{ display: "flex", gap: "12px" }}>
           <Input
-            placeholder="輸入股票編號/名稱，留空即搜尋所有股票"
+            placeholder="輸入股票編號，留空即搜尋所有股票"
             sx={{ width: "300px" }}
             onChange={(e) => handleInputChange(e.target.value)}
           />
