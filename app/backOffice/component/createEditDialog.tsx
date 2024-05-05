@@ -1,8 +1,14 @@
 "use client";
 
-import { defaultErrorToastData } from "@/app/constant";
+import { defaultCreateEditDialog, defaultErrorToastData } from "@/app/constant";
 import { fetchService } from "@/app/service/fetchService";
-import { DropDownApiDataType, ErrorToastDataType } from "@/app/type";
+import {
+  DefaultCreateEditDefaultValueType,
+  DefaultCreateEditDialogType,
+  DefaultCreateEditEnum,
+  DropDownApiDataType,
+  ErrorToastDataType,
+} from "@/app/type";
 import { openErrorToast } from "@/app/utils";
 import {
   Button,
@@ -15,24 +21,53 @@ import {
   Snackbar,
 } from "@mui/material";
 import dayjs from "dayjs";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface PropsType {
-  isOpen: boolean;
-  setIsOpen: (isOpen: boolean) => void;
+  dialogData: DefaultCreateEditDialogType;
+  setDialogData: (dialogData: DefaultCreateEditDialogType) => void;
+  fetchStock: (stock: string) => Promise<void>
 }
 
-export default function CreateEditDialog({ isOpen, setIsOpen }: PropsType) {
-  const { register, handleSubmit, reset } = useForm<DropDownApiDataType>();
+export default function CreateEditDialog({
+  dialogData,
+  setDialogData,
+  fetchStock
+}: PropsType) {
+  const { register, handleSubmit, reset } = useForm<DropDownApiDataType>({
+    defaultValues: {
+      stock_id: "",
+      industry_category: "",
+      stock_name: "",
+    },
+  });
+
+  useEffect(() => {
+    if (dialogData.defaultValues) {
+      reset({
+        stock_id: dialogData.defaultValues.stockId,
+        industry_category: dialogData.defaultValues.industryCategory,
+        stock_name: dialogData.defaultValues.stockName,
+      });
+    } else {
+      reset({
+        stock_id: "",
+        industry_category: "",
+        stock_name: "",
+      });
+    }
+  }, [reset, dialogData.defaultValues]);
+
   const fetchServices = new fetchService();
   const [toastData, setToastData] = useState<ErrorToastDataType>(
     defaultErrorToastData
   );
   const delayCloseDialog = () => {
     setTimeout(() => {
-      setIsOpen(false);
+      setDialogData(defaultCreateEditDialog);
       reset();
+      fetchStock('');
     }, 2000);
   };
 
@@ -40,20 +75,36 @@ export default function CreateEditDialog({ isOpen, setIsOpen }: PropsType) {
     data.type = "twse";
     data.date = dayjs().format("YYYY-MM-DD");
     try {
-      const result = await fetchServices.MockCreateStockInfo(data);
-      console.log(result, "result");
-      if (result === 200) {
-        openErrorToast(setToastData, {
-          isOpen: true,
-          errorMesssage: "建立成功",
-        });
-        delayCloseDialog();
+      if (dialogData.variant === DefaultCreateEditEnum.create) {
+        const result = await fetchServices.MockCreateStockInfo(data);
+        if (result === 200) {
+          openErrorToast(setToastData, {
+            isOpen: true,
+            errorMesssage: "建立成功",
+          });
+          delayCloseDialog();
+        }
+        if (result === 409) {
+          openErrorToast(setToastData, {
+            isOpen: true,
+            errorMesssage: "這筆股票已建立，請重新檢查",
+          });
+        }
       }
-      if (result === 409) {
-        openErrorToast(setToastData, {
-          isOpen: true,
-          errorMesssage: "這筆股票已建立，請重新檢查",
+
+      if (dialogData.variant === DefaultCreateEditEnum.edit) {
+        const result = await fetchServices.MockEditStockInfo({
+          ...data,
+          stock_id: dialogData.defaultValues?.stockId || "",
+          new_stock_id: data.stock_id,
         });
+        if (result === 200) {
+          openErrorToast(setToastData, {
+            isOpen: true,
+            errorMesssage: "編輯成功",
+          });
+          delayCloseDialog();
+        }
       }
     } catch (errors) {
       openErrorToast(setToastData, errors);
@@ -64,13 +115,19 @@ export default function CreateEditDialog({ isOpen, setIsOpen }: PropsType) {
     }
   };
 
+  const getCreateEditText = () =>
+    dialogData.variant === DefaultCreateEditEnum.create ? "新增" : "編輯";
+
   return (
-    <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
+    <Dialog
+      open={dialogData.isOpen}
+      onClose={() => setDialogData(defaultCreateEditDialog)}
+    >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle>新增股票</DialogTitle>
+        <DialogTitle>{getCreateEditText()}股票</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            以下項目為必填，儲存後即可新增股票
+            以下項目為必填，儲存後即可{getCreateEditText()}股票
           </DialogContentText>
           <TextField
             {...register("stock_id", { required: true })}
@@ -104,8 +161,10 @@ export default function CreateEditDialog({ isOpen, setIsOpen }: PropsType) {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setIsOpen(false)}>取消</Button>
-          <Button type="submit">儲存</Button>
+          <Button onClick={() => setDialogData(defaultCreateEditDialog)}>
+            取消
+          </Button>
+          <Button type="submit">{getCreateEditText()}</Button>
         </DialogActions>
       </form>
       <Snackbar

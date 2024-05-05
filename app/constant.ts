@@ -1,4 +1,10 @@
-import { BackOfficeListType, CategoryListType, KeyValueType, SubCategoryListType } from "./type";
+import {
+  BackOfficeListType,
+  CategoryListType,
+  DefaultCreateEditEnum,
+  KeyValueType,
+  SubCategoryListType,
+} from "./type";
 import { formatDate } from "./utils";
 
 export enum FirmmindDataTypeEnum {
@@ -30,8 +36,8 @@ export const subCateoryList: SubCategoryListType[] = [
   { desc: "電子書" },
 ];
 
-export const backOfficeCategoryList : BackOfficeListType[] = [
-  { desc: "查詢股票資料", href:"/backoOffice/" },
+export const backOfficeCategoryList: BackOfficeListType[] = [
+  { desc: "查詢股票資料", href: "/backoOffice/" },
 ];
 
 export const yearsDropdownOptions: KeyValueType[] = [
@@ -58,4 +64,9 @@ export const defaultDeleteDialog = {
   isOpen: false,
   message: "",
   stockId: "",
+};
+
+export const defaultCreateEditDialog = {
+  isOpen: false,
+  variant: DefaultCreateEditEnum.create,
 };

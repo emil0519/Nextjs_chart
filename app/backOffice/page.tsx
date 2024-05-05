@@ -6,11 +6,17 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { useEffect, useState } from "react";
 import { fetchService } from "../service/fetchService";
 import {
+  DefaultCreateEditDialogType,
+  DefaultCreateEditEnum,
   DefaultDialogType,
   DropDownApiDataType,
   ErrorToastDataType,
 } from "../type";
-import { defaultDeleteDialog, defaultErrorToastData } from "../constant";
+import {
+  defaultCreateEditDialog,
+  defaultDeleteDialog,
+  defaultErrorToastData,
+} from "../constant";
 import { openErrorToast } from "../utils";
 import TableComponennt from "./component/tableComponent/tableComponent";
 import dayjs from "dayjs";
@@ -27,7 +33,8 @@ export default function Page() {
     defaultErrorToastData
   );
   const [tableData, setTableData] = useState<GroupItem[] | null>(null);
-  const [isOpenCreateEdit, setIsOpenCreateEdit] = useState<boolean>(false);
+  const [isOpenCreateEdit, setIsOpenCreateEdit] =
+    useState<DefaultCreateEditDialogType>(defaultCreateEditDialog);
   const [deleteDialogData, setDeleteDialogData] =
     useState<DefaultDialogType>(defaultDeleteDialog);
 
@@ -108,7 +115,17 @@ export default function Page() {
           id: `column-${index}-5`,
           cell: (
             <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              <Button variant="outlined" sx={{ width: "fit-content" }}>
+              <Button
+                variant="outlined"
+                sx={{ width: "fit-content" }}
+                onClick={() =>
+                  openEditDialog(
+                    item.stock_id,
+                    item.stock_name,
+                    item.industry_category
+                  )
+                }
+              >
                 編輯
               </Button>
               <Button
@@ -142,11 +159,27 @@ export default function Page() {
     }
   };
 
-  const openDeleteDialog = async (stockId: string, stockName: string) => {
+  const openDeleteDialog = (stockId: string, stockName: string) => {
     setDeleteDialogData({
       isOpen: true,
       message: `是否確認刪除股票 ${stockId} ${stockName} ?`,
       stockId,
+    });
+  };
+
+  const openEditDialog = (
+    stockId: string,
+    stockName: string,
+    industryCategory: string
+  ) => {
+    setIsOpenCreateEdit({
+      isOpen: true,
+      variant: DefaultCreateEditEnum.edit,
+      defaultValues: {
+        stockId,
+        stockName,
+        industryCategory,
+      },
     });
   };
 
@@ -187,7 +220,12 @@ export default function Page() {
             height: "fit-content",
             marginRight: "5%",
           }}
-          onClick={() => setIsOpenCreateEdit(true)}
+          onClick={() =>
+            setIsOpenCreateEdit({
+              isOpen: true,
+              variant: DefaultCreateEditEnum.create,
+            })
+          }
         >
           <Typography component="h4">新增股票</Typography>
         </Button>
@@ -270,8 +308,9 @@ export default function Page() {
         message={errorToastData.errorMessage}
       />
       <CreateEditDialog
-        isOpen={isOpenCreateEdit}
-        setIsOpen={setIsOpenCreateEdit}
+        dialogData={isOpenCreateEdit}
+        setDialogData={setIsOpenCreateEdit}
+        fetchStock={fetchStock}
       />
       <DeleteDialog
         deleteDialogData={deleteDialogData}

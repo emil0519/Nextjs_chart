@@ -1,9 +1,12 @@
 import { FirmmindDataTypeEnum } from "../constant";
-import { ApiResponseType, DropDownApiDataType, GraphDataType } from "../type";
+import { ApiResponseType, DropDownApiDataType, EditPayloadType, GraphDataType } from "../type";
 import { formatDate } from "../utils";
 export interface FetchServiceType {
   MockCreateStockInfo(
     createData: DropDownApiDataType
+  ): Promise<number>;
+  MockEditStockInfo(
+    editData: EditPayloadType
   ): Promise<number>;
   MockGetStockInfo(
     stockInfo: string
@@ -86,6 +89,19 @@ export class fetchService implements FetchServiceType {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(createData),
+    });
+    return res.status;
+  }
+
+  public async MockEditStockInfo(
+    editData: EditPayloadType
+  ): Promise<number> {
+    const res = await fetch(`${this.localhost}/${MockApiTypeEnum.basicInfo}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(editData),
     });
     return res.status;
   }

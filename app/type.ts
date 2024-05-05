@@ -14,6 +14,10 @@ export interface DropDownApiDataType {
   date: string;
 }
 
+export interface EditPayloadType extends DropDownApiDataType {
+  new_stock_id: string;
+}
+
 export interface CategoryPropsType {
   title?: string;
   titleColor?: string;
@@ -26,12 +30,10 @@ export type CategoryListType = Omit<CategoryPropsType, "isActive" | "sx">;
 
 export type SubCategoryListType = Pick<CategoryListType, "desc">;
 
-export interface BackOfficeListType{
+export interface BackOfficeListType {
   desc: string;
   href: string;
 }
-
-
 
 export interface KeyValueType {
   key: string;
@@ -57,8 +59,21 @@ export interface ErrorToastDataType {
   errorMessage: string;
 }
 
-export interface DefaultDialogType{
+export interface DefaultDialogType {
   isOpen: boolean;
   message: string;
-  stockId:string;
-};
+  stockId: string;
+}
+
+export interface DefaultCreateEditDialogType {
+  isOpen: boolean;
+  variant: DefaultCreateEditEnum;
+  defaultValues?: DefaultCreateEditDefaultValueType
+}
+
+export interface DefaultCreateEditDefaultValueType {stockId: string, stockName:string, industryCategory: string}
+
+export enum DefaultCreateEditEnum {
+  create = "create",
+  edit = "edit",
+}
