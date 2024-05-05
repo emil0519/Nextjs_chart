@@ -26,6 +26,13 @@ export type CategoryListType = Omit<CategoryPropsType, "isActive" | "sx">;
 
 export type SubCategoryListType = Pick<CategoryListType, "desc">;
 
+export interface BackOfficeListType{
+  desc: string;
+  href: string;
+}
+
+
+
 export interface KeyValueType {
   key: string;
   value: string;
@@ -49,3 +56,4 @@ export interface ErrorToastDataType {
   isOpen: boolean;
   errorMessage: string;
 }
+

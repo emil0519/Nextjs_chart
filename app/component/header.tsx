@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useTheme } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
@@ -26,6 +26,7 @@ import {
 import { defaultErrorToastData } from "../constant";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { v4 as uuid } from "uuid";
+import Link from "next/link";
 
 interface PropsType {
   startDate: string;
@@ -76,10 +77,12 @@ export const Header = ({
       sx={{
         width: "100%",
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "space-between",
+        alignItems: "center",
         background: theme.color.white,
       }}
     >
+      <Box />
       {/* Search bar */}
       <Autocomplete
         sx={{
@@ -150,6 +153,12 @@ export const Header = ({
           />
         )}
       />
+      <Button
+        variant="contained"
+        sx={{ width: "fit-content", height: "fit-content", marginRight: "5%" }}
+      >
+        <Link href="/backOffice">股票管理後台</Link>
+      </Button>
     </Box>
   );
 };
