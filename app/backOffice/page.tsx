@@ -5,14 +5,26 @@ import Information from "./component/information";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { useEffect, useState } from "react";
 import { fetchService } from "../service/fetchService";
-import { DropDownApiDataType, ErrorToastDataType } from "../type";
-import { defaultErrorToastData } from "../constant";
+import {
+  DefaultCreateEditDialogType,
+  DefaultCreateEditEnum,
+  DefaultDialogType,
+  DropDownApiDataType,
+  ErrorToastDataType,
+} from "../type";
+import {
+  defaultCreateEditDialog,
+  defaultDeleteDialog,
+  defaultErrorToastData,
+} from "../constant";
 import { openErrorToast } from "../utils";
 import TableComponennt from "./component/tableComponent/tableComponent";
 import dayjs from "dayjs";
 import { GroupItem } from "./component/tableComponent/type";
 import { useDebouncedCallback } from "use-debounce";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import CreateEditDialog from "./component/createEditDialog";
+import DeleteDialog from "./component/deleteDialog";
 
 export default function Page() {
   const fetchServices = new fetchService();
@@ -21,6 +33,11 @@ export default function Page() {
     defaultErrorToastData
   );
   const [tableData, setTableData] = useState<GroupItem[] | null>(null);
+  const [isOpenCreateEdit, setIsOpenCreateEdit] =
+    useState<DefaultCreateEditDialogType>(defaultCreateEditDialog);
+  const [deleteDialogData, setDeleteDialogData] =
+    useState<DefaultDialogType>(defaultDeleteDialog);
+
   const searchParams = useSearchParams();
   const pathName = usePathname();
   const { replace } = useRouter();
@@ -93,6 +110,35 @@ export default function Page() {
             </Typography>
           ),
         },
+        {
+          // 動作
+          id: `column-${index}-5`,
+          cell: (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <Button
+                variant="outlined"
+                sx={{ width: "fit-content" }}
+                onClick={() =>
+                  openEditDialog(
+                    item.stock_id,
+                    item.stock_name,
+                    item.industry_category
+                  )
+                }
+              >
+                編輯
+              </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                sx={{ width: "fit-content" }}
+                onClick={() => openDeleteDialog(item.stock_id, item.stock_name)}
+              >
+                刪除
+              </Button>
+            </Box>
+          ),
+        },
       ],
     }));
 
@@ -113,6 +159,30 @@ export default function Page() {
     }
   };
 
+  const openDeleteDialog = (stockId: string, stockName: string) => {
+    setDeleteDialogData({
+      isOpen: true,
+      message: `是否確認刪除股票 ${stockId} ${stockName} ?`,
+      stockId,
+    });
+  };
+
+  const openEditDialog = (
+    stockId: string,
+    stockName: string,
+    industryCategory: string
+  ) => {
+    setIsOpenCreateEdit({
+      isOpen: true,
+      variant: DefaultCreateEditEnum.edit,
+      defaultValues: {
+        stockId,
+        stockName,
+        industryCategory,
+      },
+    });
+  };
+
   const handleInputChange = useDebouncedCallback((input: string) => {
     setInputStock(input);
     const params = new URLSearchParams(searchParams);
@@ -129,8 +199,6 @@ export default function Page() {
   useEffect(() => {
     fetchStock(inputStock);
   }, []);
-
-  useEffect(()=>console.log(errorToastData,'errorToastData'),[errorToastData])
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
@@ -152,6 +220,12 @@ export default function Page() {
             height: "fit-content",
             marginRight: "5%",
           }}
+          onClick={() =>
+            setIsOpenCreateEdit({
+              isOpen: true,
+              variant: DefaultCreateEditEnum.create,
+            })
+          }
         >
           <Typography component="h4">新增股票</Typography>
         </Button>
@@ -178,11 +252,11 @@ export default function Page() {
         }}
       >
         <Typography component="h5" sx={{ fontSize: "14px" }}>
-          股票編號/名稱
+          股票編號
         </Typography>
         <Box sx={{ display: "flex", gap: "12px" }}>
           <Input
-            placeholder="輸入股票編號/名稱，留空即搜尋所有股票"
+            placeholder="輸入股票編號，留空即搜尋所有股票"
             sx={{ width: "300px" }}
             onChange={(e) => handleInputChange(e.target.value)}
           />
@@ -218,6 +292,10 @@ export default function Page() {
                 id: 3,
                 content: <Box maxWidth="150px">建立時間</Box>,
               },
+              {
+                id: 4,
+                content: <Box maxWidth="50px">動作</Box>,
+              },
             ]}
             bodys={tableData}
           />
@@ -228,6 +306,16 @@ export default function Page() {
         open={errorToastData.isOpen}
         onClose={() => setErrorToastData(defaultErrorToastData)}
         message={errorToastData.errorMessage}
+      />
+      <CreateEditDialog
+        dialogData={isOpenCreateEdit}
+        setDialogData={setIsOpenCreateEdit}
+        fetchStock={fetchStock}
+      />
+      <DeleteDialog
+        deleteDialogData={deleteDialogData}
+        setDeleteDialogData={setDeleteDialogData}
+        fetchStock={fetchStock}
       />
     </Box>
   );
