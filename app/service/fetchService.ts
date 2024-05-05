@@ -65,6 +65,7 @@ export class fetchService implements FetchServiceType {
         method: "GET",
       }
     );
+    if (res.status === 204) return [];
     const data: ApiResponseType<DropDownApiDataType[]> = await res.json();
     return data.data;
   }

@@ -99,7 +99,12 @@ export default function Page() {
   const fetchStock = async (stock: string) => {
     try {
       const result = await fetchServices.MockGetStockInfo(stock);
-      console.log('result',result)
+      if (!result.length) {
+        openErrorToast(setErrorToastData, {
+          isOpen: true,
+          errorMesssage: "查無資訊，請更改搜尋條件",
+        });
+      }
       setTableData(generateTableBody(result));
     } catch (errors) {
       openErrorToast(setErrorToastData, errors);
@@ -109,7 +114,7 @@ export default function Page() {
   };
 
   const handleInputChange = useDebouncedCallback((input: string) => {
-    setInputStock(input)
+    setInputStock(input);
     const params = new URLSearchParams(searchParams);
     if (input) {
       params.set("query", input);
@@ -124,6 +129,8 @@ export default function Page() {
   useEffect(() => {
     fetchStock(inputStock);
   }, []);
+
+  useEffect(()=>console.log(errorToastData,'errorToastData'),[errorToastData])
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
@@ -179,20 +186,19 @@ export default function Page() {
             sx={{ width: "300px" }}
             onChange={(e) => handleInputChange(e.target.value)}
           />
-          <Button variant="outlined" sx={{ display: "flex", gap: "4px" }} 
-              onClick={handleSearch}
-              >
+          <Button
+            variant="outlined"
+            sx={{ display: "flex", gap: "4px" }}
+            onClick={handleSearch}
+          >
             <SearchOutlinedIcon />
-            <Typography
-              component="p"
-              sx={{ fontSize: "12px" }}
-            >
+            <Typography component="p" sx={{ fontSize: "12px" }}>
               查詢
             </Typography>
           </Button>
         </Box>
       </Box>
-      {tableData && (
+      {!!tableData?.length && (
         <Box sx={{ margin: "24px" }}>
           <TableComponennt
             headers={[
