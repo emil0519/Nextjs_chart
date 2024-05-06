@@ -23,7 +23,7 @@ Open terminal, copy & paste following command:
 Then open : [http://localhost:3001](http://localhost:3001)
 
  ## 💡 Key Features
-* CRUD stocks with [https://github.com/emil0519/nodejs_mysql_aws](Node.js api).
+* CRUD stocks with [Node.js api](https://github.com/emil0519/nodejs_mysql_aws).
 * Interactive graphs with hovering and changing date ranges.
 * Interactive tables.
 * Next.js URL Search params - remember user choice of stock by url, prefetch stocks with query string
