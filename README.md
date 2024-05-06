@@ -14,8 +14,8 @@
 ### Set up in local environment:
 Open terminal, copy & paste following command:
 ```
-    mkdir emil_lau_code_test
-    cd emil_lau_code_test
+    mkdir emil_lau_nextjs_chart
+    cd emil_lau_nextjs_chart
     git clone https://github.com/emil0519/Nextjs_chart.git
     npm i
     npm run dev
