@@ -28,7 +28,7 @@ enum MockApiTypeEnum {
 }
 export class fetchService implements FetchServiceType {
   public finmindtradeDomain = "https://api.finmindtrade.com/api/v4/data";
-  public mockFinmindDomain = "http://15.152.187.152/api";
+  public mockFinmindDomain = "https://15.152.187.152/api";
   public localhost = "http://localhost:3002/api";
   public finmindToken =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRlIjoiMjAyNC0wNC0xNCAxOToyNDowMCIsInVzZXJfaWQiOiJlbWlsMDUxOSIsImlwIjoiMTE4LjE2MC42NC4xNDgifQ.m_impJ5F1lGizvX8Unhas_cWZ4z19J2nwu3E4mxdO2w";
@@ -83,7 +83,7 @@ export class fetchService implements FetchServiceType {
   public async MockCreateStockInfo(
     createData: DropDownApiDataType
   ): Promise<number> {
-    const res = await fetch(`${this.localhost}/${MockApiTypeEnum.basicInfo}`, {
+    const res = await fetch(`${this.mockFinmindDomain}/${MockApiTypeEnum.basicInfo}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -96,7 +96,7 @@ export class fetchService implements FetchServiceType {
   public async MockEditStockInfo(
     editData: EditPayloadType
   ): Promise<number> {
-    const res = await fetch(`${this.localhost}/${MockApiTypeEnum.basicInfo}`, {
+    const res = await fetch(`${this.mockFinmindDomain}/${MockApiTypeEnum.basicInfo}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -109,7 +109,7 @@ export class fetchService implements FetchServiceType {
   public async MockDeleteStockInfo(
     stockId: string
   ): Promise<number> {
-    const res = await fetch(`${this.localhost}/${MockApiTypeEnum.basicInfo}`, {
+    const res = await fetch(`${this.mockFinmindDomain}/${MockApiTypeEnum.basicInfo}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
