@@ -9,7 +9,7 @@ export default function SideBar() {
   return (
     <Box
       sx={{
-        height: "90vh",
+        height: "110vh",
         background: "white",
         width:"20vw",
         maxWidth:"200px",
