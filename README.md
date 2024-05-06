@@ -6,8 +6,8 @@
     A mock on stock displaying website, featuring graphs, tables and Next.js URL search params.
   </p>
   
-  <div style="display: flex; gap: 4px; justify-content: center;">
-    <a href="https://nextjs-chart-delta.vercel.app/">Front desk (api connected to Firmtrade)</a>
+  <div style="display: flex; gap: 8px; justify-content: center; flex-direction: column">
+    <a href="https://nextjs-chart-delta.vercel.app/">Front desk (Firmtrade api)</a>
     <a href="https://nextjs-chart-delta.vercel.app/backOffice/">Backoffice (Node.js api)</a>
     <a href="https://github.com/emil0519/nodejs_mysql_aws">Backend node.js repo</a>
   </div>
