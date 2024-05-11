@@ -28,15 +28,13 @@ import StockTalbe from "./component/stockTable";
 import { fetchStock } from "./action";
 
 export default async function Page({ searchParams }: { searchParams: any }) {
-  const fetchServices = new fetchService();
   // const [inputStock, setInputStock] = useState<string>("");
   // const [errorToastData, setErrorToastData] = useState<ErrorToastDataType>(
   //   defaultErrorToastData
   // );
   // const [tableData, setTableData] = useState<GroupItem[] | null>(null);
 
-  // const [deleteDialogData, setDeleteDialogData] =
-  //   useState<DefaultDialogType>(defaultDeleteDialog);
+  
 
   // const searchParams = useSearchParams();
   // const pathName = usePathname();
@@ -61,13 +59,7 @@ export default async function Page({ searchParams }: { searchParams: any }) {
   // };
   const rawData = await fetchStock(searchParams?.query || "");
 
-  // const openDeleteDialog = (stockId: string, stockName: string) => {
-  //   setDeleteDialogData({
-  //     isOpen: true,
-  //     message: `是否確認刪除股票 ${stockId} ${stockName} ?`,
-  //     stockId,
-  //   });
-  // };
+
 
   // const openEditDialog = (
   //   stockId: string,
@@ -130,7 +122,7 @@ export default async function Page({ searchParams }: { searchParams: any }) {
         </Typography>
         <SearchSection />
       </Box>
-      {rawData && <StockTalbe rawData={rawData} fetchStock={fetchStock} />}
+      {rawData && <StockTalbe rawData={rawData} fetchStock={fetchStock} />} 
       {/* <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={errorToastData.isOpen}

@@ -6,24 +6,30 @@ import TableComponennt from "./tableComponent/tableComponent";
 import {
   DefaultCreateEditDialogType,
   DefaultCreateEditEnum,
+  DefaultDialogType,
   DropDownApiDataType,
 } from "@/app/type";
 import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
-import { defaultCreateEditDialog } from "@/app/constant";
+import { defaultCreateEditDialog, defaultDeleteDialog } from "@/app/constant";
 import CreateEditDialog from "./createEditDialog";
+import DeleteDialog from "./deleteDialog";
 
 interface PropsType {
   rawData: DropDownApiDataType[];
   fetchStock: (stock: string) => Promise<DropDownApiDataType[] | undefined>
 }
-export default function StockTalbe({ rawData,fetchStock }: PropsType): React.ReactElement {
+export default function StockTalbe({
+  rawData,
+  fetchStock,
+}: PropsType): React.ReactElement {
   const [tableData, setTableData] = useState<GroupItem[] | null>(null);
   const [isOpenCreateEdit, setIsOpenCreateEdit] =
     useState<DefaultCreateEditDialogType>(defaultCreateEditDialog);
-
+  const [deleteDialogData, setDeleteDialogData] =
+    useState<DefaultDialogType>(defaultDeleteDialog);
   const openEditDialog = (
     stockId: string,
     stockName: string,
@@ -39,10 +45,17 @@ export default function StockTalbe({ rawData,fetchStock }: PropsType): React.Rea
       },
     });
   };
+  const openDeleteDialog = (stockId: string, stockName: string) => {
+    setDeleteDialogData({
+      isOpen: true,
+      message: `是否確認刪除股票 ${stockId} ${stockName} ?`,
+      stockId,
+    });
+  };
 
   useEffect(() => {
     setTableData(generateTableBody(rawData));
-  }, [rawData,setTableData]);
+  }, [rawData]);
 
   const generateTableBody = (body: DropDownApiDataType[]): GroupItem[] =>
     body.map((item, index) => ({
@@ -134,7 +147,7 @@ export default function StockTalbe({ rawData,fetchStock }: PropsType): React.Rea
                 variant="outlined"
                 color="error"
                 sx={{ width: "fit-content" }}
-                // onClick={() => openDeleteDialog(item.stock_id, item.stock_name)}
+                onClick={() => openDeleteDialog(item.stock_id, item.stock_name)}
               >
                 刪除
               </Button>
@@ -177,6 +190,11 @@ export default function StockTalbe({ rawData,fetchStock }: PropsType): React.Rea
       <CreateEditDialog
         dialogData={isOpenCreateEdit}
         setDialogData={setIsOpenCreateEdit}
+        fetchStock={fetchStock}
+      />
+       <DeleteDialog
+        deleteDialogData={deleteDialogData}
+        setDeleteDialogData={setDeleteDialogData}
         fetchStock={fetchStock}
       />
     </>

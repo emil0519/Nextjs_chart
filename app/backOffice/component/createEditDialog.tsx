@@ -65,7 +65,9 @@ export default function CreateEditDialog({
       setDialogData(defaultCreateEditDialog);
       reset();
       replace(pathName);
+      // TOFIX, fetch stock 沒有觸法stockTable重新set raw data，原因未知，先reload
       fetchStock('')
+      window.location.reload();
     }, 2000);
   };
 
