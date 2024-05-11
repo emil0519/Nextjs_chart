@@ -23,6 +23,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import CreateEditDialog from "./component/createEditDialog";
 import DeleteDialog from "./component/deleteDialog";
 import SearchSection from "./component/searchSection";
+import CreateButton from "./component/createButton";
 
 export default async function Page({ searchParams }:{searchParams:any}) {
   const fetchServices = new fetchService();
@@ -31,8 +32,7 @@ export default async function Page({ searchParams }:{searchParams:any}) {
   //   defaultErrorToastData
   // );
   // const [tableData, setTableData] = useState<GroupItem[] | null>(null);
-  // const [isOpenCreateEdit, setIsOpenCreateEdit] =
-  //   useState<DefaultCreateEditDialogType>(defaultCreateEditDialog);
+ 
   // const [deleteDialogData, setDeleteDialogData] =
   //   useState<DefaultDialogType>(defaultDeleteDialog);
 
@@ -203,6 +203,7 @@ export default async function Page({ searchParams }:{searchParams:any}) {
         <Typography component="h2" sx={{ fontSize: "24px", fontWeight: 600 }}>
           查詢股票資料
         </Typography>
+        <CreateButton />
       </Box>
       <Box sx={{ margin: "0 24px" }}>
         <Information
@@ -228,7 +229,7 @@ export default async function Page({ searchParams }:{searchParams:any}) {
         <Typography component="h5" sx={{ fontSize: "14px" }}>
           股票編號
         </Typography>
-        <SearchSection />
+        <SearchSection /> 
        
       </Box>
       {!!tableData?.length && (

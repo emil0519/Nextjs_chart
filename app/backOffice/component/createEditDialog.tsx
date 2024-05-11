@@ -1,9 +1,7 @@
 "use client";
 
 import { defaultCreateEditDialog, defaultErrorToastData } from "@/app/constant";
-import { fetchService } from "@/app/service/fetchService";
 import {
-  DefaultCreateEditDefaultValueType,
   DefaultCreateEditDialogType,
   DefaultCreateEditEnum,
   DropDownApiDataType,
@@ -24,12 +22,20 @@ import {
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { fetchService } from "@/app/service/fetchService";
 
 interface PropsType {
-  fetchStock: (stock: string) => Promise<void>;
+  dialogData: DefaultCreateEditDialogType;
+  setDialogData: (dialogData: DefaultCreateEditDialogType) => void;
 }
 
-export default function CreateEditDialog({ fetchStock }: PropsType) {
+export default function CreateEditDialog({
+  dialogData,
+  setDialogData,
+}: PropsType) {
+  const { replace } = useRouter();
+  const pathName = usePathname();
   const { register, handleSubmit, reset } = useForm<DropDownApiDataType>({
     defaultValues: {
       stock_id: "",
@@ -37,9 +43,6 @@ export default function CreateEditDialog({ fetchStock }: PropsType) {
       stock_name: "",
     },
   });
-  const [dialogData, setDialogData] = useState<DefaultCreateEditDialogType>(
-    defaultCreateEditDialog
-  );
 
   useEffect(() => {
     if (dialogData.defaultValues) {
@@ -65,7 +68,7 @@ export default function CreateEditDialog({ fetchStock }: PropsType) {
     setTimeout(() => {
       setDialogData(defaultCreateEditDialog);
       reset();
-      fetchStock("");
+      replace(pathName);
     }, 2000);
   };
 
@@ -117,78 +120,60 @@ export default function CreateEditDialog({ fetchStock }: PropsType) {
     dialogData.variant === DefaultCreateEditEnum.create ? "新增" : "編輯";
 
   return (
-    <>
-      <Button
-        variant="outlined"
-        sx={{
-          width: "fit-content",
-          height: "fit-content",
-          marginRight: "5%",
-        }}
-        onClick={() =>
-          setDialogData({
-            isOpen: true,
-            variant: DefaultCreateEditEnum.create,
-          })
-        }
-      >
-        <Typography component="h4">新增股票</Typography>
-      </Button>
-      <Dialog
-        open={dialogData.isOpen}
-        onClose={() => setDialogData(defaultCreateEditDialog)}
-      >
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <DialogTitle>{getCreateEditText()}股票</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              以下項目為必填，儲存後即可{getCreateEditText()}股票
-            </DialogContentText>
-            <TextField
-              {...register("stock_id", { required: true })}
-              required
-              margin="dense"
-              id="stock_id"
-              name="stock_id"
-              label="股票編號"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              {...register("industry_category", { required: true })}
-              required
-              margin="dense"
-              id="industry_category"
-              name="industry_category"
-              label="產業"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              {...register("stock_name", { required: true })}
-              required
-              margin="dense"
-              id="stock_name"
-              name="stock_name"
-              label="股票名稱"
-              fullWidth
-              variant="standard"
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setDialogData(defaultCreateEditDialog)}>
-              取消
-            </Button>
-            <Button type="submit">{getCreateEditText()}</Button>
-          </DialogActions>
-        </form>
-        <Snackbar
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-          open={toastData.isOpen}
-          onClose={() => setToastData(defaultErrorToastData)}
-          message={toastData.errorMessage}
-        />
-      </Dialog>
-    </>
+    <Dialog
+      open={dialogData.isOpen}
+      onClose={() => setDialogData(defaultCreateEditDialog)}
+    >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <DialogTitle>{getCreateEditText()}股票</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            以下項目為必填，儲存後即可{getCreateEditText()}股票
+          </DialogContentText>
+          <TextField
+            {...register("stock_id", { required: true })}
+            required
+            margin="dense"
+            id="stock_id"
+            name="stock_id"
+            label="股票編號"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            {...register("industry_category", { required: true })}
+            required
+            margin="dense"
+            id="industry_category"
+            name="industry_category"
+            label="產業"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            {...register("stock_name", { required: true })}
+            required
+            margin="dense"
+            id="stock_name"
+            name="stock_name"
+            label="股票名稱"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDialogData(defaultCreateEditDialog)}>
+            取消
+          </Button>
+          <Button type="submit">{getCreateEditText()}</Button>
+        </DialogActions>
+      </form>
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={toastData.isOpen}
+        onClose={() => setToastData(defaultErrorToastData)}
+        message={toastData.errorMessage}
+      />
+    </Dialog>
   );
 }
