@@ -65,7 +65,6 @@ export default function StockTalbe({
   };
 
   useEffect(() => {
-    console.log(rawData.length)
     if (rawData.length) {
       setTableData(generateTableBody(rawData));
     } else {

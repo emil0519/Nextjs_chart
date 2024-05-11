@@ -1,85 +1,13 @@
-import { Box, Button, Input, Snackbar, Typography } from "@mui/material";
 import Information from "./component/information";
-import { useEffect, useState } from "react";
-import { fetchService } from "../service/fetchService";
-import {
-  DefaultCreateEditDialogType,
-  DefaultCreateEditEnum,
-  DefaultDialogType,
-  DropDownApiDataType,
-  ErrorToastDataType,
-} from "../type";
-import {
-  defaultCreateEditDialog,
-  defaultDeleteDialog,
-  defaultErrorToastData,
-} from "../constant";
-import { openErrorToast } from "../utils";
-import TableComponennt from "./component/tableComponent/tableComponent";
-import dayjs from "dayjs";
-import { GroupItem } from "./component/tableComponent/type";
-import { useDebouncedCallback } from "use-debounce";
-import { useSearchParams, useRouter } from "next/navigation";
-import CreateEditDialog from "./component/createEditDialog";
-import DeleteDialog from "./component/deleteDialog";
 import SearchSection from "./component/searchSection";
 import CreateButton from "./component/createButton";
 import StockTalbe from "./component/stockTable";
 import { fetchStock } from "./action";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 export default async function Page({ searchParams }: { searchParams: any }) {
-  // const [inputStock, setInputStock] = useState<string>("");
-  // const [errorToastData, setErrorToastData] = useState<ErrorToastDataType>(
-  //   defaultErrorToastData
-  // );
-  // const [tableData, setTableData] = useState<GroupItem[] | null>(null);
-
-  
-
-  // const searchParams = useSearchParams();
-  // const pathName = usePathname();
-  // const { replace } = useRouter();
-  // const fetchStock = async (stock: string) => {
-  //   try {
-  //     const result = await fetchServices.MockGetStockInfo(stock);
-  //     // if (!result.length) {
-  //     //   openErrorToast(setErrorToastData, {
-  //     //     isOpen: true,
-  //     //     errorMesssage: "查無資訊，請更改搜尋條件",
-  //     //   });
-  //     // }
-  //     return result;
-  //   } catch (errors) {
-  //     // openErrorToast(setErrorToastData, errors);
-  //     console.log('error', errors)
-  //   }
-  //   // finally {
-  //   //   setTimeout(() => setErrorToastData(defaultErrorToastData), 2000);
-  //   // }
-  // };
   const rawData = await fetchStock(searchParams?.query || "");
-
-
-
-  // const openEditDialog = (
-  //   stockId: string,
-  //   stockName: string,
-  //   industryCategory: string
-  // ) => {
-  //   setIsOpenCreateEdit({
-  //     isOpen: true,
-  //     variant: DefaultCreateEditEnum.edit,
-  //     defaultValues: {
-  //       stockId,
-  //       stockName,
-  //       industryCategory,
-  //     },
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   fetchStock(inputStock);
-  // }, []);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
@@ -123,22 +51,6 @@ export default async function Page({ searchParams }: { searchParams: any }) {
         <SearchSection />
       </Box>
       {rawData && <StockTalbe rawData={rawData} fetchStock={fetchStock} />} 
-      {/* <Snackbar
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        open={errorToastData.isOpen}
-        onClose={() => setErrorToastData(defaultErrorToastData)}
-        message={errorToastData.errorMessage}
-      />
-      <CreateEditDialog
-        dialogData={isOpenCreateEdit}
-        setDialogData={setIsOpenCreateEdit}
-        fetchStock={fetchStock}
-      />
-      <DeleteDialog
-        deleteDialogData={deleteDialogData}
-        setDeleteDialogData={setDeleteDialogData}
-        fetchStock={fetchStock}
-      /> */}
     </Box>
   );
 }
