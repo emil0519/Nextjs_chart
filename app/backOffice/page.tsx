@@ -1,8 +1,5 @@
-"use client";
-
 import { Box, Button, Input, Snackbar, Typography } from "@mui/material";
 import Information from "./component/information";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { useEffect, useState } from "react";
 import { fetchService } from "../service/fetchService";
 import {
@@ -22,25 +19,26 @@ import TableComponennt from "./component/tableComponent/tableComponent";
 import dayjs from "dayjs";
 import { GroupItem } from "./component/tableComponent/type";
 import { useDebouncedCallback } from "use-debounce";
-import { useSearchParams, usePathname, useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import CreateEditDialog from "./component/createEditDialog";
 import DeleteDialog from "./component/deleteDialog";
+import SearchSection from "./component/searchSection";
 
-export default function Page() {
+export default async function Page({ searchParams }:{searchParams:any}) {
   const fetchServices = new fetchService();
-  const [inputStock, setInputStock] = useState<string>("");
-  const [errorToastData, setErrorToastData] = useState<ErrorToastDataType>(
-    defaultErrorToastData
-  );
-  const [tableData, setTableData] = useState<GroupItem[] | null>(null);
-  const [isOpenCreateEdit, setIsOpenCreateEdit] =
-    useState<DefaultCreateEditDialogType>(defaultCreateEditDialog);
-  const [deleteDialogData, setDeleteDialogData] =
-    useState<DefaultDialogType>(defaultDeleteDialog);
+  // const [inputStock, setInputStock] = useState<string>("");
+  // const [errorToastData, setErrorToastData] = useState<ErrorToastDataType>(
+  //   defaultErrorToastData
+  // );
+  // const [tableData, setTableData] = useState<GroupItem[] | null>(null);
+  // const [isOpenCreateEdit, setIsOpenCreateEdit] =
+  //   useState<DefaultCreateEditDialogType>(defaultCreateEditDialog);
+  // const [deleteDialogData, setDeleteDialogData] =
+  //   useState<DefaultDialogType>(defaultDeleteDialog);
 
-  const searchParams = useSearchParams();
-  const pathName = usePathname();
-  const { replace } = useRouter();
+  // const searchParams = useSearchParams();
+  // const pathName = usePathname();
+  // const { replace } = useRouter();
 
   const generateTableBody = (body: DropDownApiDataType[]): GroupItem[] =>
     body.map((item, index) => ({
@@ -118,13 +116,13 @@ export default function Page() {
               <Button
                 variant="outlined"
                 sx={{ width: "fit-content" }}
-                onClick={() =>
-                  openEditDialog(
-                    item.stock_id,
-                    item.stock_name,
-                    item.industry_category
-                  )
-                }
+                // onClick={() =>
+                //   openEditDialog(
+                //     item.stock_id,
+                //     item.stock_name,
+                //     item.industry_category
+                //   )
+                // }
               >
                 編輯
               </Button>
@@ -132,7 +130,7 @@ export default function Page() {
                 variant="outlined"
                 color="error"
                 sx={{ width: "fit-content" }}
-                onClick={() => openDeleteDialog(item.stock_id, item.stock_name)}
+                // onClick={() => openDeleteDialog(item.stock_id, item.stock_name)}
               >
                 刪除
               </Button>
@@ -145,60 +143,52 @@ export default function Page() {
   const fetchStock = async (stock: string) => {
     try {
       const result = await fetchServices.MockGetStockInfo(stock);
-      if (!result.length) {
-        openErrorToast(setErrorToastData, {
-          isOpen: true,
-          errorMesssage: "查無資訊，請更改搜尋條件",
-        });
-      }
-      setTableData(generateTableBody(result));
+      // if (!result.length) {
+      //   openErrorToast(setErrorToastData, {
+      //     isOpen: true,
+      //     errorMesssage: "查無資訊，請更改搜尋條件",
+      //   });
+      // }
+      return generateTableBody(result);
     } catch (errors) {
-      openErrorToast(setErrorToastData, errors);
-    } finally {
-      setTimeout(() => setErrorToastData(defaultErrorToastData), 2000);
-    }
+      // openErrorToast(setErrorToastData, errors);
+      console.log('error', errors)
+    } 
+    // finally {
+    //   setTimeout(() => setErrorToastData(defaultErrorToastData), 2000);
+    // }
   };
+  const tableData = await fetchStock(searchParams?.query || "");
 
-  const openDeleteDialog = (stockId: string, stockName: string) => {
-    setDeleteDialogData({
-      isOpen: true,
-      message: `是否確認刪除股票 ${stockId} ${stockName} ?`,
-      stockId,
-    });
-  };
+  // const openDeleteDialog = (stockId: string, stockName: string) => {
+  //   setDeleteDialogData({
+  //     isOpen: true,
+  //     message: `是否確認刪除股票 ${stockId} ${stockName} ?`,
+  //     stockId,
+  //   });
+  // };
 
-  const openEditDialog = (
-    stockId: string,
-    stockName: string,
-    industryCategory: string
-  ) => {
-    setIsOpenCreateEdit({
-      isOpen: true,
-      variant: DefaultCreateEditEnum.edit,
-      defaultValues: {
-        stockId,
-        stockName,
-        industryCategory,
-      },
-    });
-  };
+  // const openEditDialog = (
+  //   stockId: string,
+  //   stockName: string,
+  //   industryCategory: string
+  // ) => {
+  //   setIsOpenCreateEdit({
+  //     isOpen: true,
+  //     variant: DefaultCreateEditEnum.edit,
+  //     defaultValues: {
+  //       stockId,
+  //       stockName,
+  //       industryCategory,
+  //     },
+  //   });
+  // };
 
-  const handleInputChange = useDebouncedCallback((input: string) => {
-    setInputStock(input);
-    const params = new URLSearchParams(searchParams);
-    if (input) {
-      params.set("query", input);
-    } else {
-      params.delete("query");
-    }
-    replace(`${pathName}?${params.toString()}`);
-  }, 300);
 
-  const handleSearch = () => fetchStock(inputStock);
 
-  useEffect(() => {
-    fetchStock(inputStock);
-  }, []);
+  // useEffect(() => {
+  //   fetchStock(inputStock);
+  // }, []);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
@@ -213,22 +203,6 @@ export default function Page() {
         <Typography component="h2" sx={{ fontSize: "24px", fontWeight: 600 }}>
           查詢股票資料
         </Typography>
-        <Button
-          variant="outlined"
-          sx={{
-            width: "fit-content",
-            height: "fit-content",
-            marginRight: "5%",
-          }}
-          onClick={() =>
-            setIsOpenCreateEdit({
-              isOpen: true,
-              variant: DefaultCreateEditEnum.create,
-            })
-          }
-        >
-          <Typography component="h4">新增股票</Typography>
-        </Button>
       </Box>
       <Box sx={{ margin: "0 24px" }}>
         <Information
@@ -254,23 +228,8 @@ export default function Page() {
         <Typography component="h5" sx={{ fontSize: "14px" }}>
           股票編號
         </Typography>
-        <Box sx={{ display: "flex", gap: "12px" }}>
-          <Input
-            placeholder="輸入股票編號，留空即搜尋所有股票"
-            sx={{ width: "300px" }}
-            onChange={(e) => handleInputChange(e.target.value)}
-          />
-          <Button
-            variant="outlined"
-            sx={{ display: "flex", gap: "4px" }}
-            onClick={handleSearch}
-          >
-            <SearchOutlinedIcon />
-            <Typography component="p" sx={{ fontSize: "12px" }}>
-              查詢
-            </Typography>
-          </Button>
-        </Box>
+        <SearchSection />
+       
       </Box>
       {!!tableData?.length && (
         <Box sx={{ margin: "24px" }}>
@@ -301,7 +260,7 @@ export default function Page() {
           />
         </Box>
       )}
-      <Snackbar
+      {/* <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={errorToastData.isOpen}
         onClose={() => setErrorToastData(defaultErrorToastData)}
@@ -316,7 +275,7 @@ export default function Page() {
         deleteDialogData={deleteDialogData}
         setDeleteDialogData={setDeleteDialogData}
         fetchStock={fetchStock}
-      />
+      /> */}
     </Box>
   );
 }
