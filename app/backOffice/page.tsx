@@ -24,6 +24,7 @@ import CreateEditDialog from "./component/createEditDialog";
 import DeleteDialog from "./component/deleteDialog";
 import SearchSection from "./component/searchSection";
 import CreateButton from "./component/createButton";
+import StockTalbe from "./component/stockTable";
 
 export default async function Page({ searchParams }:{searchParams:any}) {
   const fetchServices = new fetchService();
@@ -149,7 +150,7 @@ export default async function Page({ searchParams }:{searchParams:any}) {
       //     errorMesssage: "查無資訊，請更改搜尋條件",
       //   });
       // }
-      return generateTableBody(result);
+      return result;
     } catch (errors) {
       // openErrorToast(setErrorToastData, errors);
       console.log('error', errors)
@@ -158,7 +159,7 @@ export default async function Page({ searchParams }:{searchParams:any}) {
     //   setTimeout(() => setErrorToastData(defaultErrorToastData), 2000);
     // }
   };
-  const tableData = await fetchStock(searchParams?.query || "");
+  const rawData = await fetchStock(searchParams?.query || "");
 
   // const openDeleteDialog = (stockId: string, stockName: string) => {
   //   setDeleteDialogData({
@@ -232,35 +233,7 @@ export default async function Page({ searchParams }:{searchParams:any}) {
         <SearchSection /> 
        
       </Box>
-      {!!tableData?.length && (
-        <Box sx={{ margin: "24px" }}>
-          <TableComponennt
-            headers={[
-              {
-                id: 0,
-                content: <Box maxWidth="150px">股票編號</Box>,
-              },
-              {
-                id: 1,
-                content: <Box maxWidth="150px">產業</Box>,
-              },
-              {
-                id: 2,
-                content: <Box maxWidth="150px">股票名稱</Box>,
-              },
-              {
-                id: 3,
-                content: <Box maxWidth="150px">建立時間</Box>,
-              },
-              {
-                id: 4,
-                content: <Box maxWidth="50px">動作</Box>,
-              },
-            ]}
-            bodys={tableData}
-          />
-        </Box>
-      )}
+    {rawData && <StockTalbe rawData={rawData} />}
       {/* <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={errorToastData.isOpen}

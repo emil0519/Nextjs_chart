@@ -17,6 +17,7 @@ export default function SideBar() {
         display: "flex",
         flexDirection: "column",
         gap: "10px",
+        minHeight:"95vh"
       }}
     >
       {backOfficeCategoryList.map((category) => (

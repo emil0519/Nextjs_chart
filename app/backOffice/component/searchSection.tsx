@@ -14,9 +14,9 @@ export default function SearchSection(): React.ReactElement {
   const searchParams = useSearchParams();
   const pathName = usePathname();
   const [inputStock, setInputStock] = useState<string>("");
-  const handleInputChange = useDebouncedCallback((input: string) => {
+  const handleInputChange = (input: string) => {
     setInputStock(input);
-  }, 300);
+  }
   const handleSearch = () => {
     const params = new URLSearchParams(searchParams);
     if (inputStock) {
