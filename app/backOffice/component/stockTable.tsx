@@ -8,18 +8,25 @@ import {
   DefaultCreateEditEnum,
   DefaultDialogType,
   DropDownApiDataType,
+  ErrorToastDataType,
 } from "@/app/type";
 import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
-import { defaultCreateEditDialog, defaultDeleteDialog } from "@/app/constant";
+import {
+  defaultCreateEditDialog,
+  defaultDeleteDialog,
+  defaultErrorToastData,
+} from "@/app/constant";
 import CreateEditDialog from "./createEditDialog";
 import DeleteDialog from "./deleteDialog";
+import Snackbar from "@mui/material/Snackbar";
+import { openErrorToast } from "@/app/utils";
 
 interface PropsType {
   rawData: DropDownApiDataType[];
-  fetchStock: (stock: string) => Promise<DropDownApiDataType[] | undefined>
+  fetchStock: (stock: string) => Promise<DropDownApiDataType[] | undefined>;
 }
 export default function StockTalbe({
   rawData,
@@ -30,6 +37,10 @@ export default function StockTalbe({
     useState<DefaultCreateEditDialogType>(defaultCreateEditDialog);
   const [deleteDialogData, setDeleteDialogData] =
     useState<DefaultDialogType>(defaultDeleteDialog);
+  const [errorToastData, setErrorToastData] = useState<ErrorToastDataType>(
+    defaultErrorToastData
+  );
+
   const openEditDialog = (
     stockId: string,
     stockName: string,
@@ -54,7 +65,15 @@ export default function StockTalbe({
   };
 
   useEffect(() => {
-    setTableData(generateTableBody(rawData));
+    console.log(rawData.length)
+    if (rawData.length) {
+      setTableData(generateTableBody(rawData));
+    } else {
+      openErrorToast(setErrorToastData, {
+        isOpen: true,
+        errorMesssage: "查無資訊，請更改搜尋條件",
+      });
+    }
   }, [rawData]);
 
   const generateTableBody = (body: DropDownApiDataType[]): GroupItem[] =>
@@ -192,10 +211,16 @@ export default function StockTalbe({
         setDialogData={setIsOpenCreateEdit}
         fetchStock={fetchStock}
       />
-       <DeleteDialog
+      <DeleteDialog
         deleteDialogData={deleteDialogData}
         setDeleteDialogData={setDeleteDialogData}
         fetchStock={fetchStock}
+      />
+      <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        open={errorToastData.isOpen}
+        onClose={() => setErrorToastData(defaultErrorToastData)}
+        message={errorToastData.errorMessage}
       />
     </>
   );
