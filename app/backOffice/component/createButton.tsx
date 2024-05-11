@@ -1,12 +1,22 @@
 "use client";
 import { defaultCreateEditDialog } from "@/app/constant";
-import { DefaultCreateEditDialogType, DefaultCreateEditEnum } from "@/app/type";
+import {
+  DefaultCreateEditDialogType,
+  DefaultCreateEditEnum,
+  DropDownApiDataType,
+} from "@/app/type";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import CreateEditDialog from "./createEditDialog";
 
-export default function CreateButton(): React.ReactElement {
+interface PropsType {
+  fetchStock: (stock: string) => Promise<DropDownApiDataType[] | undefined>;
+}
+
+export default function CreateButton({
+  fetchStock,
+}: PropsType): React.ReactElement {
   const [isOpenCreateEdit, setIsOpenCreateEdit] =
     useState<DefaultCreateEditDialogType>(defaultCreateEditDialog);
   return (
@@ -30,6 +40,7 @@ export default function CreateButton(): React.ReactElement {
       <CreateEditDialog
         dialogData={isOpenCreateEdit}
         setDialogData={setIsOpenCreateEdit}
+        fetchStock={fetchStock}
       />
     </>
   );

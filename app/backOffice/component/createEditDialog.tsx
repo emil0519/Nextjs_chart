@@ -28,11 +28,13 @@ import { fetchService } from "@/app/service/fetchService";
 interface PropsType {
   dialogData: DefaultCreateEditDialogType;
   setDialogData: (dialogData: DefaultCreateEditDialogType) => void;
+  fetchStock: (stock: string) => Promise<DropDownApiDataType[] | undefined>;
 }
 
 export default function CreateEditDialog({
   dialogData,
   setDialogData,
+  fetchStock
 }: PropsType) {
   const { replace } = useRouter();
   const pathName = usePathname();
@@ -51,13 +53,7 @@ export default function CreateEditDialog({
         industry_category: dialogData.defaultValues.industryCategory,
         stock_name: dialogData.defaultValues.stockName,
       });
-    } else {
-      reset({
-        stock_id: "",
-        industry_category: "",
-        stock_name: "",
-      });
-    }
+    } 
   }, [reset, dialogData.defaultValues]);
 
   const fetchServices = new fetchService();
@@ -69,6 +65,7 @@ export default function CreateEditDialog({
       setDialogData(defaultCreateEditDialog);
       reset();
       replace(pathName);
+      fetchStock('')
     }, 2000);
   };
 

@@ -3,22 +3,47 @@
 import Box from "@mui/material/Box";
 import { GroupItem } from "./tableComponent/type";
 import TableComponennt from "./tableComponent/tableComponent";
-import { DropDownApiDataType } from "@/app/type";
+import {
+  DefaultCreateEditDialogType,
+  DefaultCreateEditEnum,
+  DropDownApiDataType,
+} from "@/app/type";
 import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
+import { defaultCreateEditDialog } from "@/app/constant";
+import CreateEditDialog from "./createEditDialog";
 
 interface PropsType {
   rawData: DropDownApiDataType[];
+  fetchStock: (stock: string) => Promise<DropDownApiDataType[] | undefined>
 }
-export default function StockTalbe({ rawData }: PropsType): React.ReactElement {
+export default function StockTalbe({ rawData,fetchStock }: PropsType): React.ReactElement {
   const [tableData, setTableData] = useState<GroupItem[] | null>(null);
+  const [isOpenCreateEdit, setIsOpenCreateEdit] =
+    useState<DefaultCreateEditDialogType>(defaultCreateEditDialog);
+
+  const openEditDialog = (
+    stockId: string,
+    stockName: string,
+    industryCategory: string
+  ) => {
+    setIsOpenCreateEdit({
+      isOpen: true,
+      variant: DefaultCreateEditEnum.edit,
+      defaultValues: {
+        stockId,
+        stockName,
+        industryCategory,
+      },
+    });
+  };
 
   useEffect(() => {
     setTableData(generateTableBody(rawData));
-  }, [rawData]);
-  
+  }, [rawData,setTableData]);
+
   const generateTableBody = (body: DropDownApiDataType[]): GroupItem[] =>
     body.map((item, index) => ({
       rowId: `row-${index}`,
@@ -95,13 +120,13 @@ export default function StockTalbe({ rawData }: PropsType): React.ReactElement {
               <Button
                 variant="outlined"
                 sx={{ width: "fit-content" }}
-                // onClick={() =>
-                //   openEditDialog(
-                //     item.stock_id,
-                //     item.stock_name,
-                //     item.industry_category
-                //   )
-                // }
+                onClick={() =>
+                  openEditDialog(
+                    item.stock_id,
+                    item.stock_name,
+                    item.industry_category
+                  )
+                }
               >
                 編輯
               </Button>
@@ -119,34 +144,41 @@ export default function StockTalbe({ rawData }: PropsType): React.ReactElement {
       ],
     }));
   return (
-    <Box sx={{ margin: "24px" }}>
-      {tableData && (
-        <TableComponennt
-          headers={[
-            {
-              id: 0,
-              content: <Box maxWidth="150px">股票編號</Box>,
-            },
-            {
-              id: 1,
-              content: <Box maxWidth="150px">產業</Box>,
-            },
-            {
-              id: 2,
-              content: <Box maxWidth="150px">股票名稱</Box>,
-            },
-            {
-              id: 3,
-              content: <Box maxWidth="150px">建立時間</Box>,
-            },
-            {
-              id: 4,
-              content: <Box maxWidth="50px">動作</Box>,
-            },
-          ]}
-          bodys={tableData}
-        />
-      )}
-    </Box>
+    <>
+      <Box sx={{ margin: "24px" }}>
+        {tableData && (
+          <TableComponennt
+            headers={[
+              {
+                id: 0,
+                content: <Box maxWidth="150px">股票編號</Box>,
+              },
+              {
+                id: 1,
+                content: <Box maxWidth="150px">產業</Box>,
+              },
+              {
+                id: 2,
+                content: <Box maxWidth="150px">股票名稱</Box>,
+              },
+              {
+                id: 3,
+                content: <Box maxWidth="150px">建立時間</Box>,
+              },
+              {
+                id: 4,
+                content: <Box maxWidth="50px">動作</Box>,
+              },
+            ]}
+            bodys={tableData}
+          />
+        )}
+      </Box>
+      <CreateEditDialog
+        dialogData={isOpenCreateEdit}
+        setDialogData={setIsOpenCreateEdit}
+        fetchStock={fetchStock}
+      />
+    </>
   );
 }

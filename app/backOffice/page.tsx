@@ -25,140 +25,40 @@ import DeleteDialog from "./component/deleteDialog";
 import SearchSection from "./component/searchSection";
 import CreateButton from "./component/createButton";
 import StockTalbe from "./component/stockTable";
+import { fetchStock } from "./action";
 
-export default async function Page({ searchParams }:{searchParams:any}) {
+export default async function Page({ searchParams }: { searchParams: any }) {
   const fetchServices = new fetchService();
   // const [inputStock, setInputStock] = useState<string>("");
   // const [errorToastData, setErrorToastData] = useState<ErrorToastDataType>(
   //   defaultErrorToastData
   // );
   // const [tableData, setTableData] = useState<GroupItem[] | null>(null);
- 
+
   // const [deleteDialogData, setDeleteDialogData] =
   //   useState<DefaultDialogType>(defaultDeleteDialog);
 
   // const searchParams = useSearchParams();
   // const pathName = usePathname();
   // const { replace } = useRouter();
-
-  const generateTableBody = (body: DropDownApiDataType[]): GroupItem[] =>
-    body.map((item, index) => ({
-      rowId: `row-${index}`,
-      columns: [
-        {
-          // 股票編號
-          id: `column-${item.stock_id}-1`,
-          cell: (
-            <Typography
-              component="p"
-              sx={{
-                color: "#40425A",
-                fontSize: "14px",
-                fontFamily: "Noto Sans TC",
-              }}
-            >
-              {item.stock_id}
-            </Typography>
-          ),
-        },
-        {
-          // 產業
-          id: `column-${item.industry_category}-2`,
-          cell: (
-            <Typography
-              component="p"
-              sx={{
-                color: "#40425A",
-                fontSize: "14px",
-                fontFamily: "Noto Sans TC",
-              }}
-            >
-              {item.industry_category}
-            </Typography>
-          ),
-        },
-        {
-          // 股票名稱
-          id: `column-${item.stock_name}-3`,
-          cell: (
-            <Typography
-              component="p"
-              sx={{
-                color: "#40425A",
-                fontSize: "14px",
-                fontFamily: "Noto Sans TC",
-              }}
-            >
-              {item.stock_name}
-            </Typography>
-          ),
-        },
-        {
-          // 建立時間
-          id: `column-${item.date}-4`,
-          cell: (
-            <Typography
-              component="p"
-              sx={{
-                color: "#40425A",
-                fontSize: "14px",
-                fontFamily: "Noto Sans TC",
-              }}
-            >
-              {dayjs(item.date).format("YYYY/MM/DD HH:mm")}
-            </Typography>
-          ),
-        },
-        {
-          // 動作
-          id: `column-${index}-5`,
-          cell: (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              <Button
-                variant="outlined"
-                sx={{ width: "fit-content" }}
-                // onClick={() =>
-                //   openEditDialog(
-                //     item.stock_id,
-                //     item.stock_name,
-                //     item.industry_category
-                //   )
-                // }
-              >
-                編輯
-              </Button>
-              <Button
-                variant="outlined"
-                color="error"
-                sx={{ width: "fit-content" }}
-                // onClick={() => openDeleteDialog(item.stock_id, item.stock_name)}
-              >
-                刪除
-              </Button>
-            </Box>
-          ),
-        },
-      ],
-    }));
-
-  const fetchStock = async (stock: string) => {
-    try {
-      const result = await fetchServices.MockGetStockInfo(stock);
-      // if (!result.length) {
-      //   openErrorToast(setErrorToastData, {
-      //     isOpen: true,
-      //     errorMesssage: "查無資訊，請更改搜尋條件",
-      //   });
-      // }
-      return result;
-    } catch (errors) {
-      // openErrorToast(setErrorToastData, errors);
-      console.log('error', errors)
-    } 
-    // finally {
-    //   setTimeout(() => setErrorToastData(defaultErrorToastData), 2000);
-    // }
-  };
+  // const fetchStock = async (stock: string) => {
+  //   try {
+  //     const result = await fetchServices.MockGetStockInfo(stock);
+  //     // if (!result.length) {
+  //     //   openErrorToast(setErrorToastData, {
+  //     //     isOpen: true,
+  //     //     errorMesssage: "查無資訊，請更改搜尋條件",
+  //     //   });
+  //     // }
+  //     return result;
+  //   } catch (errors) {
+  //     // openErrorToast(setErrorToastData, errors);
+  //     console.log('error', errors)
+  //   }
+  //   // finally {
+  //   //   setTimeout(() => setErrorToastData(defaultErrorToastData), 2000);
+  //   // }
+  // };
   const rawData = await fetchStock(searchParams?.query || "");
 
   // const openDeleteDialog = (stockId: string, stockName: string) => {
@@ -185,8 +85,6 @@ export default async function Page({ searchParams }:{searchParams:any}) {
   //   });
   // };
 
-
-
   // useEffect(() => {
   //   fetchStock(inputStock);
   // }, []);
@@ -204,7 +102,7 @@ export default async function Page({ searchParams }:{searchParams:any}) {
         <Typography component="h2" sx={{ fontSize: "24px", fontWeight: 600 }}>
           查詢股票資料
         </Typography>
-        <CreateButton />
+        <CreateButton fetchStock={fetchStock} />
       </Box>
       <Box sx={{ margin: "0 24px" }}>
         <Information
@@ -230,10 +128,9 @@ export default async function Page({ searchParams }:{searchParams:any}) {
         <Typography component="h5" sx={{ fontSize: "14px" }}>
           股票編號
         </Typography>
-        <SearchSection /> 
-       
+        <SearchSection />
       </Box>
-    {rawData && <StockTalbe rawData={rawData} />}
+      {rawData && <StockTalbe rawData={rawData} fetchStock={fetchStock} />}
       {/* <Snackbar
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={errorToastData.isOpen}
