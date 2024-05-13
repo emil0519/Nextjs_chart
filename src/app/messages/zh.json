@@ -3,6 +3,25 @@
       "checkStockInfo": "查詢股票資料",
       "stockManageOffice": "股票管理後台",
       "goToCustomerPanel": "前往客戶前台",
-      "searchStockInfo": "查詢股票資料"
+      "searchStockInfo": "查詢股票資料",
+      "instructions": "功能說明",
+      "instructionOne": "可直接在本頁查詢股票基本資訊，搜尋列留空即查詢所有股票",
+      "instructionTwo": "按新增股票資訊可新增一檔股票",
+      "instructionThree": "在列表中可編輯或刪除對應股票",
+      "stockSymbol": "股票編號",
+      "createStock": "新增股票",
+      "createSuccess": "建立成功",
+      "stockAlreadyExist": "這筆股票已建立，請重新檢查",
+      "editSuccess": "編輯成功.",
+      "stock": "股票",
+      "createHint": "以下項目為必填，儲存後即可新增股票",
+      "editHint": "以下項目為必填，儲存後即可編輯股票",
+      "industry": "產業",
+      "stockName": "股票名稱"
+    },
+    "Common":{
+      "cancel": "取消",
+      "create": "新增",
+      "edit": "編輯"
     }
   }

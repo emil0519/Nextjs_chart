@@ -18,12 +18,13 @@ import {
   TextField,
   DialogActions,
   Snackbar,
-  Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
+
 
 interface PropsType {
   dialogData: DefaultCreateEditDialogType;
@@ -45,6 +46,8 @@ export default function CreateEditDialog({
       stock_name: "",
     },
   });
+  const t = useTranslations("BackOffice");
+  const tCommon= useTranslations("Common");
 
   useEffect(() => {
     if (dialogData.defaultValues) {
@@ -80,14 +83,14 @@ export default function CreateEditDialog({
         if (result === 200) {
           openErrorToast(setToastData, {
             isOpen: true,
-            errorMesssage: "建立成功",
+            errorMesssage: t('createSuccess'),
           });
           delayCloseDialog();
         }
         if (result === 409) {
           openErrorToast(setToastData, {
             isOpen: true,
-            errorMesssage: "這筆股票已建立，請重新檢查",
+            errorMesssage: t('stockAlreadyExist'),
           });
         }
       }
@@ -101,7 +104,7 @@ export default function CreateEditDialog({
         if (result === 200) {
           openErrorToast(setToastData, {
             isOpen: true,
-            errorMesssage: "編輯成功",
+            errorMesssage: t('editSuccess'),
           });
           delayCloseDialog();
         }
@@ -116,7 +119,11 @@ export default function CreateEditDialog({
   };
 
   const getCreateEditText = () =>
-    dialogData.variant === DefaultCreateEditEnum.create ? "新增" : "編輯";
+    dialogData.variant === DefaultCreateEditEnum.create ? tCommon('create') : tCommon('edit');
+
+  const hintKey = dialogData.variant === DefaultCreateEditEnum.create
+    ? 'createHint'
+    : 'editHint';
 
   return (
     <Dialog
@@ -124,10 +131,10 @@ export default function CreateEditDialog({
       onClose={() => setDialogData(defaultCreateEditDialog)}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
-        <DialogTitle>{getCreateEditText()}股票</DialogTitle>
+        <DialogTitle>{getCreateEditText()}&nbsp;{t('stock')}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            以下項目為必填，儲存後即可{getCreateEditText()}股票
+              {t(hintKey)}
           </DialogContentText>
           <TextField
             {...register("stock_id", { required: true })}
@@ -135,7 +142,7 @@ export default function CreateEditDialog({
             margin="dense"
             id="stock_id"
             name="stock_id"
-            label="股票編號"
+            label={t('stockSymbol')}
             fullWidth
             variant="standard"
           />
@@ -145,7 +152,7 @@ export default function CreateEditDialog({
             margin="dense"
             id="industry_category"
             name="industry_category"
-            label="產業"
+            label={t('industry')}
             fullWidth
             variant="standard"
           />
@@ -155,14 +162,14 @@ export default function CreateEditDialog({
             margin="dense"
             id="stock_name"
             name="stock_name"
-            label="股票名稱"
+            label={t('stockName')}
             fullWidth
             variant="standard"
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialogData(defaultCreateEditDialog)}>
-            取消
+            {tCommon('cancel')}
           </Button>
           <Button type="submit">{getCreateEditText()}</Button>
         </DialogActions>

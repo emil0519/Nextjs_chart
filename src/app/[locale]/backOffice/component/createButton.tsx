@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
 import CreateEditDialog from "./createEditDialog";
+import { useTranslations } from "next-intl";
 
 interface PropsType {
   fetchStock: (stock: string) => Promise<DropDownApiDataType[] | undefined>;
@@ -19,6 +20,7 @@ export default function CreateButton({
 }: PropsType): React.ReactElement {
   const [isOpenCreateEdit, setIsOpenCreateEdit] =
     useState<DefaultCreateEditDialogType>(defaultCreateEditDialog);
+  const t = useTranslations("BackOffice");
   return (
     <>
       <Button
@@ -35,7 +37,7 @@ export default function CreateButton({
           })
         }
       >
-        <Typography component="h4">新增股票</Typography>
+        <Typography component="h4">{t('createStock')}</Typography>
       </Button>
       <CreateEditDialog
         dialogData={isOpenCreateEdit}
