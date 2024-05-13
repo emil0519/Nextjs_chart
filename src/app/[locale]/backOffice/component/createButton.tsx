@@ -1,10 +1,10 @@
 "use client";
-import { defaultCreateEditDialog } from "@/app/constant";
+import { defaultCreateEditDialog } from "@/src/app/constant";
 import {
   DefaultCreateEditDialogType,
   DefaultCreateEditEnum,
   DropDownApiDataType,
-} from "@/app/type";
+} from "@/src/app/type";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";

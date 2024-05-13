@@ -5,11 +5,11 @@ import StockTalbe from "./component/stockTable";
 import { fetchStock } from "./action";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { useTranslations } from "next-intl";
+import {getTranslations} from 'next-intl/server';
 
 export default async function Page({ searchParams }: { searchParams: any }) {
-  const rawData = await fetchStock(searchParams?.query || "");
-  const t = useTranslations("Index");
+  const rawData =  await fetchStock(searchParams?.query || "");
+  const t = await getTranslations('Index');
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>

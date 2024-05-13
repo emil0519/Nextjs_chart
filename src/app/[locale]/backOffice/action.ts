@@ -1,6 +1,6 @@
 "use server";
 
-import { fetchService } from "../service/fetchService";
+import { fetchService } from "../../service/fetchService";
 
 export async function fetchStock(stockId: string) {
   const fetchServices = new fetchService();

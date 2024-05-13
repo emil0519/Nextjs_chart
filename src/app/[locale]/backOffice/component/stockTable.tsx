@@ -9,7 +9,7 @@ import {
   DefaultDialogType,
   DropDownApiDataType,
   ErrorToastDataType,
-} from "@/app/type";
+} from "@/src/app/type";
 import Typography from "@mui/material/Typography";
 import dayjs from "dayjs";
 import Button from "@mui/material/Button";
@@ -18,11 +18,11 @@ import {
   defaultCreateEditDialog,
   defaultDeleteDialog,
   defaultErrorToastData,
-} from "@/app/constant";
+} from "@/src/app/constant";
 import CreateEditDialog from "./createEditDialog";
 import DeleteDialog from "./deleteDialog";
 import Snackbar from "@mui/material/Snackbar";
-import { openErrorToast } from "@/app/utils";
+import { openErrorToast } from "@/src/app/utils";
 
 interface PropsType {
   rawData: DropDownApiDataType[];
