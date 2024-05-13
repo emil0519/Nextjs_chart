@@ -27,6 +27,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { v4 as uuid } from "uuid";
 import Link from "next/link";
 import { fetchService } from "../service/fetchService";
+import Hamburger from "./hamburger";
 
 interface PropsType {
   startDate: string;
@@ -47,6 +48,7 @@ export const Header = ({
   const fetchServices = new fetchService();
   const theme = useTheme();
   const [dropDownData, setDropDownData] = useState<DropDownApiDataType[]>([]);
+  const [isSideBarOpen, setIsSetBarOpen] = useState<boolean>(false);
   const searchParams = useSearchParams();
   const pathName = usePathname();
   const { replace } = useRouter();
@@ -80,15 +82,22 @@ export const Header = ({
         justifyContent: "space-between",
         alignItems: "center",
         background: theme.color.white,
+        minHeight: "80px",
       }}
     >
-      <Box />
+      <Box
+        sx={{ display: { xs: "block", lg: "none" }, marginLeft: "10%" }}
+        onClick={() => setIsSetBarOpen((prevState) => !prevState)}
+      >
+        <Hamburger isOpen={isSideBarOpen} />
+      </Box>
       {/* Search bar */}
       <Autocomplete
         sx={{
           width: 400,
           marginTop: 2,
           marginBottom: 2,
+          display: { xs: "none", lg: "block" },
         }}
         aria-haspopup
         options={dropDownData}
@@ -155,7 +164,12 @@ export const Header = ({
       />
       <Button
         variant="contained"
-        sx={{ width: "fit-content", height: "fit-content", marginRight: "5%" }}
+        sx={{
+          display: { xs: "none", lg: "block" },
+          width: "fit-content",
+          height: "fit-content",
+          marginRight: "5%",
+        }}
       >
         <Link href="/backOffice">To backoffice (multiple language)</Link>
       </Button>
