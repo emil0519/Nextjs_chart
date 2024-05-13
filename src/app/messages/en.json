@@ -1,5 +1,8 @@
 {
-    "Index": {
-      "title": "Hello world!"
+    "BackOffice": {
+      "checkStockInfo": "Check Stock Info",
+      "stockManageOffice": "Stock Management Panel",
+      "goToCustomerPanel": "Go to Customer Panel",
+      "searchStockInfo": "Search Stock Info"
     }
   }

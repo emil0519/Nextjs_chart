@@ -9,7 +9,7 @@ import {getTranslations} from 'next-intl/server';
 
 export default async function Page({ searchParams }: { searchParams: any }) {
   const rawData =  await fetchStock(searchParams?.query || "");
-  const t = await getTranslations('Index');
+  const t = await getTranslations('BackOffice');
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
@@ -21,9 +21,8 @@ export default async function Page({ searchParams }: { searchParams: any }) {
           width: "100%",
         }}
       >
-        <p>{t("title")}</p>
         <Typography component="h2" sx={{ fontSize: "24px", fontWeight: 600 }}>
-          查詢股票資料
+          {t("checkStockInfo")}
         </Typography>
         <CreateButton fetchStock={fetchStock} />
       </Box>

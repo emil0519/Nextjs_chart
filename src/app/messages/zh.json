@@ -1,5 +1,8 @@
 {
-    "Index": {
-      "title": "哈囉世界!"
+    "BackOffice": {
+      "checkStockInfo": "查詢股票資料",
+      "stockManageOffice": "股票管理後台",
+      "goToCustomerPanel": "前往客戶前台",
+      "searchStockInfo": "查詢股票資料"
     }
   }

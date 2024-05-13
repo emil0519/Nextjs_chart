@@ -1,7 +1,10 @@
 import { Box, Button, Typography } from "@mui/material";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
-export default async function Header() {
+export default function Header() {
+  const t = useTranslations("BackOffice");
+
   return (
     <Box
       component="nav"
@@ -23,14 +26,13 @@ export default async function Header() {
           fontWeight: 700,
         }}
       >
-        股票管理後台
+        {t("stockManageOffice")}
       </Typography>
-
       <Button
         variant="contained"
         sx={{ width: "fit-content", height: "fit-content", marginRight: "5%" }}
       >
-        <Link href="/">前往客戶前台</Link>
+        <Link href="/">{t("goToCustomerPanel")}</Link>
       </Button>
     </Box>
   );
