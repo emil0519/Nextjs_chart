@@ -1,9 +1,7 @@
 "use client";
 
 import { defaultCreateEditDialog, defaultErrorToastData } from "@/app/constant";
-import { fetchService } from "@/app/service/fetchService";
 import {
-  DefaultCreateEditDefaultValueType,
   DefaultCreateEditDialogType,
   DefaultCreateEditEnum,
   DropDownApiDataType,
@@ -19,15 +17,18 @@ import {
   TextField,
   DialogActions,
   Snackbar,
+  Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { fetchService } from "@/app/service/fetchService";
 
 interface PropsType {
   dialogData: DefaultCreateEditDialogType;
   setDialogData: (dialogData: DefaultCreateEditDialogType) => void;
-  fetchStock: (stock: string) => Promise<void>
+  fetchStock: (stock: string) => Promise<DropDownApiDataType[] | undefined>;
 }
 
 export default function CreateEditDialog({
@@ -35,6 +36,8 @@ export default function CreateEditDialog({
   setDialogData,
   fetchStock
 }: PropsType) {
+  const { replace } = useRouter();
+  const pathName = usePathname();
   const { register, handleSubmit, reset } = useForm<DropDownApiDataType>({
     defaultValues: {
       stock_id: "",
@@ -50,13 +53,7 @@ export default function CreateEditDialog({
         industry_category: dialogData.defaultValues.industryCategory,
         stock_name: dialogData.defaultValues.stockName,
       });
-    } else {
-      reset({
-        stock_id: "",
-        industry_category: "",
-        stock_name: "",
-      });
-    }
+    } 
   }, [reset, dialogData.defaultValues]);
 
   const fetchServices = new fetchService();
@@ -67,7 +64,10 @@ export default function CreateEditDialog({
     setTimeout(() => {
       setDialogData(defaultCreateEditDialog);
       reset();
-      fetchStock('');
+      replace(pathName);
+      // TOFIX, fetch stock 沒有觸法stockTable重新set raw data，原因未知，先reload
+      fetchStock('')
+      window.location.reload();
     }, 2000);
   };
 

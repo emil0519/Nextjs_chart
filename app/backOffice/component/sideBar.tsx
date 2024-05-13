@@ -9,7 +9,6 @@ export default function SideBar() {
   return (
     <Box
       sx={{
-        height: "110vh",
         background: "white",
         width:"20vw",
         maxWidth:"200px",
@@ -18,6 +17,7 @@ export default function SideBar() {
         display: "flex",
         flexDirection: "column",
         gap: "10px",
+        minHeight:"95vh"
       }}
     >
       {backOfficeCategoryList.map((category) => (

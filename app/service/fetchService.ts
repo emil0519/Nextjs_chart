@@ -1,19 +1,21 @@
+import fetch from 'node-fetch';
 import { FirmmindDataTypeEnum } from "../constant";
-import { ApiResponseType, DropDownApiDataType, EditPayloadType, GraphDataType } from "../type";
+import {
+  ApiResponseType,
+  DropDownApiDataType,
+  EditPayloadType,
+  GraphDataType,
+} from "../type";
 import { formatDate } from "../utils";
+import https from "https";
 export interface FetchServiceType {
-  MockCreateStockInfo(
-    createData: DropDownApiDataType
-  ): Promise<number>;
-  MockEditStockInfo(
-    editData: EditPayloadType
-  ): Promise<number>;
+  agent: https.Agent;
+  MockCreateStockInfo(createData: DropDownApiDataType): Promise<number>;
+  MockEditStockInfo(editData: EditPayloadType): Promise<number>;
   MockGetStockInfo(
     stockInfo: string
   ): Promise<ApiResponseType<DropDownApiDataType[]>["data"]>;
-  MockDeleteStockInfo(
-    stockId: string
-  ): Promise<number>;
+  MockDeleteStockInfo(stockId: string): Promise<number>;
   GetStockInfo(
     stockId: string
   ): Promise<ApiResponseType<DropDownApiDataType[]>["data"]>;
@@ -27,6 +29,10 @@ enum MockApiTypeEnum {
   basicInfo = "basicInfo",
 }
 export class fetchService implements FetchServiceType {
+  public agent= new https.Agent({
+    rejectUnauthorized: false
+  });
+  
   public finmindtradeDomain = "https://api.finmindtrade.com/api/v4/data";
   public mockFinmindDomain = "https://15.152.187.152/api";
   public localhost = "http://localhost:3002/api";
@@ -73,6 +79,7 @@ export class fetchService implements FetchServiceType {
       }${!!stockInfo.length ? `&dataId=${stockInfo}` : ""}`,
       {
         method: "GET",
+        agent: this.agent
       }
     );
     if (res.status === 204) return [];
@@ -83,39 +90,44 @@ export class fetchService implements FetchServiceType {
   public async MockCreateStockInfo(
     createData: DropDownApiDataType
   ): Promise<number> {
-    const res = await fetch(`${this.mockFinmindDomain}/${MockApiTypeEnum.basicInfo}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(createData),
-    });
+    const res = await fetch(
+      `${this.mockFinmindDomain}/${MockApiTypeEnum.basicInfo}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(createData),
+      }
+    );
     return res.status;
   }
 
-  public async MockEditStockInfo(
-    editData: EditPayloadType
-  ): Promise<number> {
-    const res = await fetch(`${this.mockFinmindDomain}/${MockApiTypeEnum.basicInfo}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(editData),
-    });
+  public async MockEditStockInfo(editData: EditPayloadType): Promise<number> {
+    const res = await fetch(
+      `${this.mockFinmindDomain}/${MockApiTypeEnum.basicInfo}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editData),
+      }
+    );
     return res.status;
   }
 
-  public async MockDeleteStockInfo(
-    stockId: string
-  ): Promise<number> {
-    const res = await fetch(`${this.mockFinmindDomain}/${MockApiTypeEnum.basicInfo}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({stock_id: stockId}),
-    });
+  public async MockDeleteStockInfo(stockId: string): Promise<number> {
+    const res = await fetch(
+      `${this.mockFinmindDomain}/${MockApiTypeEnum.basicInfo}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ stock_id: stockId }),
+      }
+    );
     return res.status;
   }
 }

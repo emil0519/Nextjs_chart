@@ -1,7 +1,7 @@
 "use client";
 import { defaultDeleteDialog, defaultErrorToastData } from "@/app/constant";
 import { fetchService } from "@/app/service/fetchService";
-import { DefaultDialogType, ErrorToastDataType } from "@/app/type";
+import { DefaultDialogType, DropDownApiDataType, ErrorToastDataType } from "@/app/type";
 import { openErrorToast } from "@/app/utils";
 import {
   Dialog,
@@ -17,7 +17,7 @@ import { useState } from "react";
 interface PropsType {
   deleteDialogData: DefaultDialogType;
   setDeleteDialogData: (deleteDialogData: DefaultDialogType) => void;
-  fetchStock: (stock: string) => Promise<void>
+  fetchStock: (stock: string) => Promise<DropDownApiDataType[] | undefined>
 }
 
 export default function DeleteDialog({
@@ -41,7 +41,9 @@ export default function DeleteDialog({
         });
         setTimeout(() => {
           setDeleteDialogData(defaultDeleteDialog);
+          // TOFIX, fetch stock 沒有觸法stockTable重新set raw data，原因未知，先reload
           fetchStock("")
+          window.location.reload();
         }, 2000);
       }
     } catch (errors) {
