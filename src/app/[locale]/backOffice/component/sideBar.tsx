@@ -1,5 +1,5 @@
 "use client";
-import { backOfficeCategoryList } from "@/app/constant";
+import { backOfficeCategoryList } from "@/src/app/constant";
 import { Box } from "@mui/material";
 import { useState } from "react";
 import Option from "./option";

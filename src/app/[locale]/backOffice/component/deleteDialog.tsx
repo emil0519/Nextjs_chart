@@ -1,8 +1,8 @@
 "use client";
-import { defaultDeleteDialog, defaultErrorToastData } from "@/app/constant";
-import { fetchService } from "@/app/service/fetchService";
-import { DefaultDialogType, DropDownApiDataType, ErrorToastDataType } from "@/app/type";
-import { openErrorToast } from "@/app/utils";
+import { defaultDeleteDialog, defaultErrorToastData } from "@/src/app/constant";
+import { fetchService } from "@/src/app/service/fetchService";
+import { DefaultDialogType, DropDownApiDataType, ErrorToastDataType } from "@/src/app/type";
+import { openErrorToast } from "@/src/app/utils";
 import {
   Dialog,
   DialogTitle,
