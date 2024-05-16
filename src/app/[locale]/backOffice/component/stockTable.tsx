@@ -23,6 +23,7 @@ import CreateEditDialog from "./createEditDialog";
 import DeleteDialog from "./deleteDialog";
 import Snackbar from "@mui/material/Snackbar";
 import { openErrorToast } from "@/src/app/[locale]/utils";
+import { useTranslations } from "next-intl";
 
 interface PropsType {
   rawData: DropDownApiDataType[];
@@ -32,6 +33,8 @@ export default function StockTalbe({
   rawData,
   fetchStock,
 }: PropsType): React.ReactElement {
+  const t = useTranslations("BackOffice");
+  const tCommon = useTranslations("Common");
   const [tableData, setTableData] = useState<GroupItem[] | null>(null);
   const [isOpenCreateEdit, setIsOpenCreateEdit] =
     useState<DefaultCreateEditDialogType>(defaultCreateEditDialog);
@@ -59,7 +62,7 @@ export default function StockTalbe({
   const openDeleteDialog = (stockId: string, stockName: string) => {
     setDeleteDialogData({
       isOpen: true,
-      message: `是否確認刪除股票 ${stockId} ${stockName} ?`,
+      message: `${t("confirmDeleteStock")} ${stockId} ${stockName} ?`,
       stockId,
     });
   };
@@ -70,7 +73,7 @@ export default function StockTalbe({
     } else {
       openErrorToast(setErrorToastData, {
         isOpen: true,
-        errorMesssage: "查無資訊，請更改搜尋條件",
+        errorMesssage: t("noData"),
       });
     }
   }, [rawData]);
@@ -159,7 +162,7 @@ export default function StockTalbe({
                   )
                 }
               >
-                編輯
+                {tCommon("edit")}
               </Button>
               <Button
                 variant="outlined"
@@ -167,7 +170,7 @@ export default function StockTalbe({
                 sx={{ width: "fit-content" }}
                 onClick={() => openDeleteDialog(item.stock_id, item.stock_name)}
               >
-                刪除
+                {tCommon("delete")}
               </Button>
             </Box>
           ),
@@ -182,23 +185,23 @@ export default function StockTalbe({
             headers={[
               {
                 id: 0,
-                content: <Box maxWidth="150px">股票編號</Box>,
+                content: <Box maxWidth="150px">{t("stockSymbol")}</Box>,
               },
               {
                 id: 1,
-                content: <Box maxWidth="150px">產業</Box>,
+                content: <Box maxWidth="150px">{t("industry")}</Box>,
               },
               {
                 id: 2,
-                content: <Box maxWidth="150px">股票名稱</Box>,
+                content: <Box maxWidth="150px">{t("stockName")}</Box>,
               },
               {
                 id: 3,
-                content: <Box maxWidth="150px">建立時間</Box>,
+                content: <Box maxWidth="150px">{t("createTime")}</Box>,
               },
               {
                 id: 4,
-                content: <Box maxWidth="50px">動作</Box>,
+                content: <Box maxWidth="50px">{tCommon("action")}</Box>,
               },
             ]}
             bodys={tableData}

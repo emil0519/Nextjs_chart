@@ -17,11 +17,18 @@
       "createHint": "Fields below are required. Proceed to create a stock.",
       "editHint": "Fields below are required. Proceed to edit a stock.",
       "industry": "Industry",
-      "stockName": "Stock Name"
+      "stockName": "Stock Name",
+      "searchPlaceholder": "Enter stock symbol or leave blank to search for all stock",
+      "confirmDeleteStock": "Are you confirm to delete",
+      "noData": "No Data, please adjust your searching conditoin",
+      "createTime": "Create time"
     },
     "Common":{
       "cancel": "Cancel",
       "create": "Create",
-      "edit": "Edit"
+      "edit": "Edit",
+      "search": "Search",
+      "delete": "Delete",
+      "action": "Action"
     }
   }

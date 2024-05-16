@@ -17,11 +17,18 @@
       "createHint": "以下項目為必填，儲存後即可新增股票",
       "editHint": "以下項目為必填，儲存後即可編輯股票",
       "industry": "產業",
-      "stockName": "股票名稱"
+      "stockName": "股票名稱",
+      "searchPlaceholder": "輸入股票編號，留空即搜尋所有股票",
+      "confirmDeleteStock": "是否確認刪除股票",
+      "noData": "查無資訊，請更改搜尋條件",
+      "createTime": "建立時間"
     },
     "Common":{
       "cancel": "取消",
       "create": "新增",
-      "edit": "編輯"
+      "edit": "編輯",
+      "search": "查詢",
+      "delete": "刪除",
+      "action": "操作"
     }
   }
