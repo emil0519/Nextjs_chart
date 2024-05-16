@@ -14,7 +14,6 @@ import {
   ErrorToastDataType,
   SelectedStockType,
 } from "../type";
-import { fetchService } from "../service/fetchService";
 import {
   formatTitle,
   getSepcificStockWithDate,
@@ -27,6 +26,7 @@ import { defaultErrorToastData } from "../constant";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { v4 as uuid } from "uuid";
 import Link from "next/link";
+import { fetchService } from "../service/fetchService";
 
 interface PropsType {
   startDate: string;

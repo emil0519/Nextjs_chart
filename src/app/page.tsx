@@ -14,12 +14,12 @@ import {
   stripFirstYear,
   openErrorToast,
   formatTitle,
-} from "./utils";
-import { ErrorToastDataType, GraphDataType, SelectedStockType } from "./type";
+} from "./[locale]/utils";
+import { ErrorToastDataType, GraphDataType, SelectedStockType } from "./[locale]/type";
 import { DataTable } from "./component/dataTable";
-import { defaultErrorToastData } from "./constant";
+import { defaultErrorToastData } from "./[locale]/constant";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { fetchService } from "./service/fetchService";
+import { fetchService } from "./[locale]/service/fetchService";
 
 export default function Home() {
   const [selectedStock, setSelectedStock] = useState<SelectedStockType>({

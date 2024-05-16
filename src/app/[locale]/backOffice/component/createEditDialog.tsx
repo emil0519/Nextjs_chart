@@ -1,14 +1,14 @@
 "use client";
 
-import { defaultCreateEditDialog, defaultErrorToastData } from "@/src/app/constant";
-import { fetchService } from "@/src/app/service/fetchService";
+import { defaultCreateEditDialog, defaultErrorToastData } from "@/src/app/[locale]/constant";
+import { fetchService } from "@/src/app/[locale]/service/fetchService";
 import {
   DefaultCreateEditDialogType,
   DefaultCreateEditEnum,
   DropDownApiDataType,
   ErrorToastDataType,
-} from "@/src/app/type";
-import { openErrorToast } from "@/src/app/utils";
+} from "@/src/app/[locale]/type";
+import { openErrorToast } from "@/src/app/[locale]/utils";
 import {
   Button,
   Dialog,

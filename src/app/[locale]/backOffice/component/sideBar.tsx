@@ -2,7 +2,7 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
 import Option from "./option";
-import { BackOfficeListType } from "@/src/app/type";
+import { BackOfficeListType } from "@/src/app/[locale]/type";
 import { useTranslations } from "next-intl";
 // import { useRouter } from 'next/router';
 
