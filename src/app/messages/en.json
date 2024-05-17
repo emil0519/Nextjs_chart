@@ -2,7 +2,7 @@
     "BackOffice": {
       "checkStockInfo": "Check Stock Info",
       "stockManageOffice": "Stock Management Panel",
-      "goToCustomerPanel": "Go to Customer Panel",
+      "goToCustomerPanel": "Go to Customer Panel (Chinese only)",
       "searchStockInfo": "Search Stock Info",
       "instructions": "Instructions",
       "instructionOne": "Check basic info of stocks, if the input below is empty, it will search for all stocks",
