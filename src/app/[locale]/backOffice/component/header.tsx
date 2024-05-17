@@ -1,6 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import LanguageSwitch from "./languageSwitch";
 
 export default function Header() {
   const t = useTranslations("BackOffice");
@@ -28,12 +29,19 @@ export default function Header() {
       >
         {t("stockManageOffice")}
       </Typography>
-      <Button
-        variant="contained"
-        sx={{ width: "fit-content", height: "fit-content", marginRight: "5%" }}
-      >
-        <Link href="/">{t("goToCustomerPanel")}</Link>
-      </Button>
+      <Box sx={{display:"flex", gap:"12px"}}>
+        <Button
+          variant="contained"
+          sx={{
+            width: "fit-content",
+            height: "fit-content",
+            marginRight: "5%",
+          }}
+        >
+          <Link href="/">{t("goToCustomerPanel")}</Link>
+        </Button>
+        <LanguageSwitch />
+      </Box>
     </Box>
   );
 }
