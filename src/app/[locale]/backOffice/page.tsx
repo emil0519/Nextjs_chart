@@ -5,9 +5,11 @@ import StockTalbe from "./component/stockTable";
 import { fetchStock } from "./action";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { getTranslations } from "next-intl/server";
 
 export default async function Page({ searchParams }: { searchParams: any }) {
   const rawData = await fetchStock(searchParams?.query || "");
+  const t = await getTranslations("BackOffice");
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
@@ -20,17 +22,16 @@ export default async function Page({ searchParams }: { searchParams: any }) {
         }}
       >
         <Typography component="h2" sx={{ fontSize: "24px", fontWeight: 600 }}>
-          查詢股票資料
         </Typography>
         <CreateButton fetchStock={fetchStock} />
       </Box>
       <Box sx={{ margin: "0 24px" }}>
         <Information
-          title="功能說明"
+          title={t("instructions")}
           contentList={[
-            "可直接在本頁查詢股票基本資訊，搜尋列留空即查詢所有股票",
-            "按新增股票資訊可新增一檔股票",
-            "在列表中可編輯或刪除對應股票",
+            t("instructionOne"),
+            t("instructionTwo"),
+            t("instructionThree"),
           ]}
         />
       </Box>
@@ -46,11 +47,11 @@ export default async function Page({ searchParams }: { searchParams: any }) {
         }}
       >
         <Typography component="h5" sx={{ fontSize: "14px" }}>
-          股票編號
+          {t("stockSymbol")}
         </Typography>
         <SearchSection />
       </Box>
-      {rawData && <StockTalbe rawData={rawData} fetchStock={fetchStock} />} 
+      {rawData && <StockTalbe rawData={rawData} fetchStock={fetchStock} />}
     </Box>
   );
 }

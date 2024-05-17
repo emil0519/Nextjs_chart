@@ -1,25 +1,18 @@
 "use client";
 
 import { Box, Snackbar } from "@mui/material";
+
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import { defaultErrorToastData } from "./constant";
+import { fetchService } from "./service/fetchService";
+import { SelectedStockType, GraphDataType, ErrorToastDataType } from "./type";
+import { formatDate, getSepcificStockWithDate, getYearBeofore, formatTitle, stripFirstYear, processYoy, openErrorToast } from "./utils";
+import { DataTable } from "./component/dataTable";
+import { Graph } from "./component/graph";
 import { Header } from "./component/header";
 import { SideBar } from "./component/sideBar";
 import { Title } from "./component/title";
-import { useEffect, useState } from "react";
-import { Graph } from "./component/graph";
-import {
-  formatDate,
-  getSepcificStockWithDate,
-  getYearBeofore,
-  processYoy,
-  stripFirstYear,
-  openErrorToast,
-  formatTitle,
-} from "./utils";
-import { ErrorToastDataType, GraphDataType, SelectedStockType } from "./type";
-import { DataTable } from "./component/dataTable";
-import { defaultErrorToastData } from "./constant";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { fetchService } from "./service/fetchService";
 
 export default function Home() {
   const [selectedStock, setSelectedStock] = useState<SelectedStockType>({

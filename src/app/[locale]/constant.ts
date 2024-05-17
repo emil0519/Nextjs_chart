@@ -7,6 +7,12 @@ import {
 } from "./type";
 import { formatDate } from "./utils";
 
+export const locales = ['en', 'zh'];
+export const defaultLocale = 'en';
+
+export const localePrefix = 'always'; // Default
+
+
 export enum FirmmindDataTypeEnum {
   TaiwanStockInfo = "dataset=TaiwanStockInfo",
   TaiwanStockMonthRevenue = "dataset=TaiwanStockMonthRevenue",

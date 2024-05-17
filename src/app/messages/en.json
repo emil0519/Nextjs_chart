@@ -1,0 +1,34 @@
+{
+    "BackOffice": {
+      "checkStockInfo": "Check Stock Info",
+      "stockManageOffice": "Stock Management Panel",
+      "goToCustomerPanel": "Go to Customer Panel (Chinese only)",
+      "searchStockInfo": "Search Stock Info",
+      "instructions": "Instructions",
+      "instructionOne": "Check basic info of stocks, if the input below is empty, it will search for all stocks",
+      "instructionTwo": "Click Create Stock to create a new stock info",
+      "instructionThree": "Edit or delete a specific stock in the table",
+      "stockSymbol": "Stock Symbol",
+      "createStock": "Create Stock",
+      "createSuccess": "Successfully created.",
+      "stockAlreadyExist": "This stock is existed already, please check again.",
+      "editSuccess": "Successfully edited.",
+      "stock": "Stock",
+      "createHint": "Fields below are required. Proceed to create a stock.",
+      "editHint": "Fields below are required. Proceed to edit a stock.",
+      "industry": "Industry",
+      "stockName": "Stock Name",
+      "searchPlaceholder": "Enter stock symbol or leave blank to search for all stock",
+      "confirmDeleteStock": "Are you confirm to delete",
+      "noData": "No Data, please adjust your searching conditoin",
+      "createTime": "Create time"
+    },
+    "Common":{
+      "cancel": "Cancel",
+      "create": "Create",
+      "edit": "Edit",
+      "search": "Search",
+      "delete": "Delete",
+      "action": "Action"
+    }
+  }

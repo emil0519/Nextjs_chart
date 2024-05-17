@@ -5,14 +5,17 @@ import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
 import Typography from "@mui/material/Typography";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import { useDebouncedCallback } from "use-debounce";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function SearchSection(): React.ReactElement {
   const { replace } = useRouter();
   const searchParams = useSearchParams();
   const pathName = usePathname();
+  const t = useTranslations("BackOffice");
+  const tCommon = useTranslations("Common");
+  
   const [inputStock, setInputStock] = useState<string>("");
   const handleInputChange = (input: string) => {
     setInputStock(input);
@@ -37,8 +40,8 @@ export default function SearchSection(): React.ReactElement {
   return (
     <Box sx={{ display: "flex", gap: "12px" }}>
       <Input
-        placeholder="輸入股票編號，留空即搜尋所有股票"
-        sx={{ width: "300px" }}
+        placeholder={t("searchPlaceholder")}
+        sx={{ width: "450px" }}
         onChange={(e) => handleInputChange(e.target.value)}
         value={inputStock}
         name="stock_id_input"
@@ -50,7 +53,7 @@ export default function SearchSection(): React.ReactElement {
       >
         <SearchOutlinedIcon />
         <Typography component="p" sx={{ fontSize: "12px" }}>
-          查詢
+          {tCommon("search")}
         </Typography>
       </Button>
     </Box>

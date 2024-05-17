@@ -2,7 +2,6 @@
 import { Box, Button, Menu, MenuItem, useTheme } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useMemo, useState } from "react";
-import { defaultErrorToastData, yearsDropdownOptions } from "../constant";
 import { Chart } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -28,6 +27,7 @@ import {
   stripFirstYear,
 } from "../utils";
 import { ErrorToastDataType, GraphDataType, SelectedStockType } from "../type";
+import { defaultErrorToastData, yearsDropdownOptions } from "../constant";
 
 ChartJS.register(
   LinearScale,

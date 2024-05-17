@@ -1,11 +1,17 @@
 "use client";
-import { backOfficeCategoryList } from "@/app/constant";
 import { Box } from "@mui/material";
 import { useState } from "react";
 import Option from "./option";
+import { BackOfficeListType } from "@/src/app/[locale]/type";
+import { useTranslations } from "next-intl";
+// import { useRouter } from 'next/router';
 
 export default function SideBar() {
-  const [selectedCategory, setSelectedCategory] = useState<string>("查詢股票資料");
+  const t = useTranslations("BackOffice");
+  const [selectedCategory, setSelectedCategory] = useState<string>(t('searchStockInfo'));
+  const backOfficeCategoryList: BackOfficeListType[] = [
+    { desc: t('searchStockInfo'), href: "/backoOffice/" },
+  ];
   return (
     <Box
       sx={{
