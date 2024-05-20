@@ -5,6 +5,9 @@
   <p align="center">
     A mock on stock displaying website, featuring graphs, tables and Next.js URL search params.
   </p>
+  <p align="center">
+    Available in English, Chinese and Japanese.
+  </p>
     <div><a href="https://nextjs-chart-delta.vercel.app/">Front desk (Firmtrade api)</a></div>
     <div><a href="https://nextjs-chart-delta.vercel.app/backOffice/">Backoffice (Node.js api)</a></div>
     <div><a href="https://github.com/emil0519/nodejs_mysql_aws">Backend node.js repo</a></div>
