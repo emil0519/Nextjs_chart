@@ -8,6 +8,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 enum LangEnum {
   en = "en",
   zh = "zh",
+  jp = "jp"
 }
 
 export default function LanguageSwitch() {
@@ -33,6 +34,11 @@ export default function LanguageSwitch() {
         <MenuItem value={LangEnum.zh}>
           <Link href="/backOffice" locale={LangEnum.zh}>
             Chinese
+          </Link>
+        </MenuItem>
+        <MenuItem value={LangEnum.jp}>
+          <Link href="/backOffice" locale={LangEnum.jp}>
+            Japanese
           </Link>
         </MenuItem>
       </Select>

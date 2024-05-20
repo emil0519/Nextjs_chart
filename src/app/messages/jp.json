@@ -1,0 +1,35 @@
+{
+    "BackOffice": {
+      "checkStockInfo": "株式情報確認",
+      "stockManageOffice": "在庫管理パネル",
+      "goToCustomerPanel": "顧客パネルへ移動（中国語のみ）",
+      "searchStockInfo": "株式情報検索",
+      "instructions": "説明",
+      "instructionOne": "株式の基本情報を確認します。下記が空の場合、全ての株式を検索します",
+      "instructionTwo": "新しい株式情報を作成するには「Create Stock」をクリックします",
+      "instructionThree": "テーブル内の特定の株を編集または削除",
+      "stockSymbol": "株式記号",
+      "createStock": "株式を作成",
+      "createSuccess": "正常に作成されました。",
+      "stockAlreadyExist": "この株は既に存在しています。再確認してください。",
+      "editSuccess": "正常に編集されました。",
+      "stock": "株式",
+      "createHint": "以下のフィールドは必須です。株式の作成を続行します。",
+      "editHint": "以下のフィールドは必須です。株式の編集を続行します。",
+      "industry": "業界",
+      "stockName": "株式名",
+      "searchPlaceholder": "株式記号を入力するか、空白のままで全ての株式を検索",
+      "confirmDeleteStock": "本当に削除しますか",
+      "noData": "データがありません。検索条件を調整してください",
+      "createTime": "作成時間"
+    },
+    "Common": {
+      "cancel": "キャンセル",
+      "create": "作成",
+      "edit": "編集",
+      "search": "検索",
+      "delete": "削除",
+      "action": "操作"
+    }
+  }
+  

@@ -157,7 +157,7 @@ export const Header = ({
         variant="contained"
         sx={{ width: "fit-content", height: "fit-content", marginRight: "5%" }}
       >
-        <Link href="/backOffice">To backoffice (bilingual)</Link>
+        <Link href="/backOffice">To backoffice (multiple language)</Link>
       </Button>
     </Box>
   );
