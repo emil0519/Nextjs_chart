@@ -8,8 +8,8 @@
   <p align="center">
     Available in English, Chinese and Japanese.
   </p>
-    <div><a href="https://nextjs-chart-delta.vercel.app/">Front desk (Firmtrade api)</a></div>
-    <div><a href="https://nextjs-chart-delta.vercel.app/backOffice/">Backoffice (Node.js api)</a></div>
+    <div><a href="https://nextjs-chart-delta.vercel.app/">Front desk (Firmtrade api, Chinese only)</a></div>
+    <div><a href="https://nextjs-chart-delta.vercel.app/backOffice/">Backoffice (Node.js api, mulitple languages)</a></div>
     <div><a href="https://github.com/emil0519/nodejs_mysql_aws">Backend node.js repo</a></div>
 </div>
 <hr>
