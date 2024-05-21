@@ -1,13 +1,19 @@
 import { Box, Typography } from "@mui/material";
 import { SelectedStockType } from "../type";
 
-export const Title = ({ title }: { title: SelectedStockType["name"] }): React.ReactElement => (
+export const Title = ({
+  title,
+}: {
+  title: SelectedStockType["name"];
+}): React.ReactElement => (
   <Box
     sx={{
       backgroundColor: "#FAFAFA",
-      width: "800px",
+      width: { xs: "100%", lg: "800px" },
       padding: "8px 16px",
-      height: "50px",
+      height: { xs: "75px", lg: "50px" },
+      display: { xs: "flex", lg: "block" },
+      alignItems: { xs: "center", lg: "" },
       border: "1px solid #DFDFDF",
     }}
   >

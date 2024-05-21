@@ -28,6 +28,7 @@ import { v4 as uuid } from "uuid";
 import Link from "next/link";
 import { fetchService } from "../service/fetchService";
 import Hamburger from "./hamburger";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 interface PropsType {
   startDate: string;
@@ -47,6 +48,7 @@ export const Header = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const fetchServices = new fetchService();
   const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const [dropDownData, setDropDownData] = useState<DropDownApiDataType[]>([]);
   const [isSideBarOpen, setIsSetBarOpen] = useState<boolean>(false);
   const searchParams = useSearchParams();
@@ -83,21 +85,23 @@ export const Header = ({
         alignItems: "center",
         background: theme.color.white,
         minHeight: "80px",
+        gap: { xs: "24px", lg: "0" },
       }}
     >
       <Box
-        sx={{ display: { xs: "block", lg: "none" }, marginLeft: "10%" }}
+        sx={{ display: { xs: "block", lg: "none" }, marginLeft: "5%" }}
         onClick={() => setIsSetBarOpen((prevState) => !prevState)}
       >
         <Hamburger isOpen={isSideBarOpen} />
       </Box>
+      <Box sx={{ display: { xs: "none", lg: "block" } }}></Box>
       {/* Search bar */}
       <Autocomplete
         sx={{
           width: 400,
           marginTop: 2,
           marginBottom: 2,
-          display: { xs: "none", lg: "block" },
+          marginLeft: { xs: "0", lg: "5%" },
         }}
         aria-haspopup
         options={dropDownData}
@@ -165,11 +169,11 @@ export const Header = ({
       <Button
         variant="contained"
         sx={{
-          display: { xs: "none", lg: "block" },
           width: "fit-content",
           height: "fit-content",
           marginRight: "5%",
         }}
+        size={isSmallScreen ? "small" : "medium"}
       >
         <Link href="/backOffice">To backoffice (multiple language)</Link>
       </Button>

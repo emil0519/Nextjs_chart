@@ -100,7 +100,6 @@ export const Graph = ({
       sx={{
         backgroundColor: theme.color.white,
         border: "1px solid #DFDFDF",
-        width: "100%",
         display: "flex",
         flexDirection: "column",
         padding: "20px 10px",
