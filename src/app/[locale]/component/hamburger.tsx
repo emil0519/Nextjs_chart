@@ -17,7 +17,7 @@ export default function Hamburger({ isOpen }: { isOpen: boolean }): React.ReactE
         width: '100%',
         backgroundColor: 'black',
         transition: 'all 200ms',
-        transform: isOpen ? 'translateY(12px) rotate(45deg)' : 'none', // Tailwind translate-y-3 and rotate-45
+        transform: isOpen ? 'translateY(12px) rotate(45deg)' : 'none',
       }} />
       <Box sx={{
         height: 4, 

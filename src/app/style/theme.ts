@@ -8,6 +8,7 @@ declare module '@mui/material/styles' {
       yellow: string;
       darkYellow: string;
       red: string;
+      darkBlue: string;
     };
   }
   interface ThemeOptions {
@@ -16,6 +17,7 @@ declare module '@mui/material/styles' {
       yellow: string;
       darkYellow: string;
       red: string;
+      darkBlue: string;
     };
   }
 }
@@ -25,7 +27,8 @@ const theme = createTheme({
     white: 'white',
     yellow: '#FCDF9B',
     darkYellow: "#F1AB02",
-    red: "#CB4B4B"
+    red: "#CB4B4B",
+    darkBlue: "#0286F4"
   }
 });
 

@@ -103,7 +103,7 @@ export default function Home() {
         component="main"
         sx={{
           display: "flex",
-          margin: { xs: "auto", lg: "50px auto" },
+          margin: { xs: "0", lg: "50px auto" },
           gap: 5,
         }}
       >
