@@ -24,8 +24,6 @@ export const DataTable = ({
     sx={{
       backgroundColor: "white",
       border: "1px solid #DFDFDF",
-      width: "100%",
-      maxWidth: "800px",
       display: "flex",
       flexDirection: "column",
       padding: "20px 10px",

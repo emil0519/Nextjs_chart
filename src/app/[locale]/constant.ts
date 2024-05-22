@@ -7,7 +7,7 @@ import {
 } from "./type";
 import { formatDate } from "./utils";
 
-export const locales = ['en', 'zh','jp'];
+export const locales = ['jp', 'zh','en'];
 export const defaultLocale = 'en';
 
 export const localePrefix = 'always'; // Default

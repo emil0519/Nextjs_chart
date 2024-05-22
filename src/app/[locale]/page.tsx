@@ -7,7 +7,15 @@ import { useState, useEffect } from "react";
 import { defaultErrorToastData } from "./constant";
 import { fetchService } from "./service/fetchService";
 import { SelectedStockType, GraphDataType, ErrorToastDataType } from "./type";
-import { formatDate, getSepcificStockWithDate, getYearBeofore, formatTitle, stripFirstYear, processYoy, openErrorToast } from "./utils";
+import {
+  formatDate,
+  getSepcificStockWithDate,
+  getYearBeofore,
+  formatTitle,
+  stripFirstYear,
+  processYoy,
+  openErrorToast,
+} from "./utils";
 import { DataTable } from "./component/dataTable";
 import { Graph } from "./component/graph";
 import { Header } from "./component/header";
@@ -93,10 +101,22 @@ export default function Home() {
       />
       <Box
         component="main"
-        sx={{ display: "flex", margin: "50px auto", gap: 5 }}
+        sx={{
+          display: "flex",
+          margin: { xs: "0", lg: "50px auto" },
+          gap: 5,
+        }}
       >
         <SideBar />
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: { xs: 1, lg: 2 },
+            width: { xs: "100vw", lg: "100%" },
+            maxWidth: { xs: "100%", lg: "800px" },
+          }}
+        >
           <Title title={selectedStock.name} />
           <Graph
             startDate={startDate}
