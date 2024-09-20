@@ -15,7 +15,9 @@
 <hr>
 
 ### Set up in local environment:
+
 Open terminal, copy & paste following command:
+
 ```
     mkdir emil_lau_nextjs_chart
     cd emil_lau_nextjs_chart
@@ -23,17 +25,25 @@ Open terminal, copy & paste following command:
     npm i
     npm run dev
 ```
+
 Then open : [http://localhost:3001](http://localhost:3001)
 
- ## 💡 Key Features
-* CRUD stocks with [Node.js api](https://github.com/emil0519/nodejs_mysql_aws).
-* Interactive graphs with hovering and changing date ranges.
-* Interactive tables.
-* Next.js URL Search params - remember user choice of stock by url, prefetch stocks with query string
+## 💡 Key Features
 
- 
- ## 🛠 Tech Stack 
- * <img src="https://github.com/marwin1991/profile-technology-icons/assets/136815194/5f8c622c-c217-4649-b0a9-7e0ee24bd704" alt="Next.js" width="14"/>  **Next.js** : Modern React framework best for SEO and performance.
-* <img src="https://user-images.githubusercontent.com/25181517/183890598-19a0ac2d-e88a-4005-a8df-1ee36782fde1.png" alt="Typescript"  width="14"/>  **Typescript** : Superset of React, best for scalable project to perform type check before runtime.
-* <img src="https://user-images.githubusercontent.com/25181517/189716630-fe6c084c-6c66-43af-aa49-64c8aea4a5c2.png" alt="Material UI" width="14"/>  **Material UI** : Highly customisable & powerful UI library, with massive community support.
-* **Next intl** : Simple internationalization package for Next.js.
+- CRUD stocks with [Node.js api](https://github.com/emil0519/nodejs_mysql_aws).
+- Interactive graphs with hovering and changing date ranges.
+- Interactive tables.
+- Next.js URL Search params - remember user choice of stock by url, prefetch stocks with query string
+
+## 🛠 Tech Stack
+
+- <img src="https://github.com/marwin1991/profile-technology-icons/assets/136815194/5f8c622c-c217-4649-b0a9-7e0ee24bd704" alt="Next.js" width="14"/> **Next.js** : Modern React framework best for SEO and performance.
+- <img src="https://user-images.githubusercontent.com/25181517/183890598-19a0ac2d-e88a-4005-a8df-1ee36782fde1.png" alt="Typescript"  width="14"/> **Typescript** : Superset of React, best for scalable project to perform type check before runtime.
+- <img src="https://user-images.githubusercontent.com/25181517/189716630-fe6c084c-6c66-43af-aa49-64c8aea4a5c2.png" alt="Material UI" width="14"/> **Material UI** : Highly customisable & powerful UI library, with massive community support.
+- **Next intl** : Simple internationalization package for Next.js.
+
+## To-do Features
+
+1.  Login mechanism
+2.  Payment
+3.  Prediction and complex computation
